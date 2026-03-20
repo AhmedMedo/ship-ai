@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   },
   description:
     'Launch your AI SaaS in days, not months. Production-ready Next.js boilerplate with streaming chat, multi-provider AI, usage tracking, and Stripe billing.',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
