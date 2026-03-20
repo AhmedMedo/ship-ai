@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+package-lock.json
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+
+# Production
+build/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+
+# Docker
+docker/volumes/
+docker-compose.override.yml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Sentry
+.sentryclirc
+
+# Project planning docs (not part of the boilerplate)
+shipai-claude-code-docs/
