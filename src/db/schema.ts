@@ -1,4 +1,4 @@
-import { relations, type SQL } from 'drizzle-orm';
+import { relations } from 'drizzle-orm';
 import {
   pgTable,
   uuid,
