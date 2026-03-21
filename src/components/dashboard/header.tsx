@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { ThemeToggle } from '@/components/shared/theme-toggle';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Sidebar } from './sidebar';
 
 interface HeaderProps {
@@ -42,6 +42,7 @@ export function Header({ userEmail, userRole, planName }: HeaderProps) {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0">
+            <SheetTitle className="sr-only">Navigation</SheetTitle>
             <Sidebar userEmail={userEmail} userRole={userRole} planName={planName} />
           </SheetContent>
         </Sheet>
