@@ -1,1 +1,6 @@
-// TODO: Stripe client initialization
+import Stripe from 'stripe';
+
+// Stripe server-side client — used for Checkout, Portal, Webhooks
+export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  typescript: true,
+});
