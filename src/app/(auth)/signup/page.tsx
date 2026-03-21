@@ -151,8 +151,7 @@ export default function SignupPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="mt-1 w-full rounded-[10px] py-3 text-[15px] font-bold"
-            style={{ backgroundColor: '#0F4C75', color: '#ffffff' }}
+            className="mt-1 w-full rounded-[10px] bg-primary py-3 text-[15px] font-bold text-primary-foreground hover:bg-primary/90"
           >
             {loading ? 'Creating account...' : 'Create account'}
           </Button>

@@ -55,7 +55,7 @@ export function ChatContainer({ conversationId, title, model }: ChatContainerPro
   }
 
   return (
-    <div className="flex h-full flex-col" style={{ background: 'var(--card)' }}>
+    <div className="flex h-full flex-col bg-card">
       <ChatHeader
         title={title || (messages[0] ? getMessageText(messages[0]).slice(0, 60) : 'New chat')}
         model={model}
@@ -79,8 +79,7 @@ export function ChatContainer({ conversationId, title, model }: ChatContainerPro
         {/* Error display */}
         {error && (
           <div
-            className="mx-auto max-w-md rounded-lg px-4 py-3 text-center text-sm"
-            style={{ background: '#FEE2E2', color: '#DC2626' }}
+            className="mx-auto max-w-md rounded-lg bg-destructive/10 px-4 py-3 text-center text-sm text-destructive"
           >
             {error.message || 'Something went wrong. Please try again.'}
           </div>
@@ -91,8 +90,7 @@ export function ChatContainer({ conversationId, title, model }: ChatContainerPro
           <div className="flex justify-center">
             <button
               onClick={stop}
-              className="rounded-lg border px-4 py-2 text-xs font-medium transition-colors hover:bg-[var(--muted)]"
-              style={{ borderColor: 'var(--border)', color: '#475569' }}
+              className="rounded-lg border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
             >
               Stop generating
             </button>

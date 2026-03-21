@@ -42,7 +42,6 @@ export function ConversationList() {
     await fetch(`/api/conversations/${id}`, { method: 'DELETE' });
     setConversations((prev) => prev.filter((c) => c.id !== id));
 
-    // Navigate away if we deleted the active conversation
     if (pathname.includes(id)) {
       router.push('/dashboard/chat');
     }
@@ -65,60 +64,52 @@ export function ConversationList() {
   );
 
   return (
-    <div
-      className="flex h-full w-[280px] flex-shrink-0 flex-col border-r"
-      style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
-    >
-      {/* Header */}
+    <div className="flex h-full w-[280px] flex-shrink-0 flex-col border-r bg-card">
       <div className="p-4">
         <Link
           href="/dashboard/chat"
-          className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
-          style={{ background: '#0F4C75' }}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
         >
           <Plus className="h-4 w-4" />
           New chat
         </Link>
         <div className="relative mt-2.5">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2" style={{ color: '#94A3B8' }} />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search conversations..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border py-2 pl-9 pr-3 text-[13px] outline-none transition-colors focus:border-[#0F4C75]"
-            style={{ background: 'var(--muted)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+            className="w-full rounded-lg border bg-muted py-2 pl-9 pr-3 text-[13px] outline-none transition-colors focus:border-primary"
           />
         </div>
       </div>
 
-      {/* Conversation list */}
       <div className="flex-1 overflow-y-auto px-2 py-1">
         {loading ? (
           <div className="space-y-2 p-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-14 animate-pulse rounded-lg" style={{ background: 'var(--muted)' }} />
+              <div key={i} className="h-14 animate-pulse rounded-lg bg-muted" />
             ))}
           </div>
         ) : filtered.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm" style={{ color: '#94A3B8' }}>
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground">
             {search ? 'No conversations found' : 'No conversations yet'}
           </div>
         ) : (
           filtered.map((conv) => {
-            const isActive = pathname === `/dashboard/chat/${conv.id}`;
+            const active = pathname === `/dashboard/chat/${conv.id}`;
             return (
               <div
                 key={conv.id}
                 className={cn(
                   'group my-0.5 flex items-start justify-between rounded-lg px-3 py-3 transition-colors',
-                  isActive ? '' : 'hover:bg-[var(--muted)]',
+                  active ? 'bg-primary/10' : 'hover:bg-muted',
                 )}
-                style={isActive ? { background: '#E8F4FD' } : {}}
               >
                 <Link href={`/dashboard/chat/${conv.id}`} className="min-w-0 flex-1">
                   <div className="truncate text-[13px] font-semibold">{conv.title}</div>
-                  <div className="mt-0.5 flex gap-2 text-[11px]" style={{ color: '#94A3B8' }}>
+                  <div className="mt-0.5 flex gap-2 text-[11px] text-muted-foreground">
                     <span>{conv.messageCount} msgs</span>
                     <span>{timeAgo(conv.updatedAt)}</span>
                   </div>
@@ -128,8 +119,7 @@ export function ConversationList() {
                     e.preventDefault();
                     handleDelete(conv.id);
                   }}
-                  className="ml-2 mt-1 hidden flex-shrink-0 rounded p-1 transition-colors hover:bg-red-100 group-hover:block"
-                  style={{ color: '#EF4444' }}
+                  className="ml-2 mt-1 hidden flex-shrink-0 rounded p-1 text-destructive transition-colors hover:bg-red-100 group-hover:block"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>

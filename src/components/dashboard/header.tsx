@@ -30,8 +30,7 @@ export function Header({ userEmail, userRole, planName }: HeaderProps) {
 
   return (
     <header
-      className="flex h-14 flex-shrink-0 items-center justify-between border-b px-6"
-      style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+      className="flex h-14 flex-shrink-0 items-center justify-between border-b bg-card px-6"
     >
       <div className="flex items-center gap-3">
         {/* Mobile hamburger */}
@@ -52,10 +51,7 @@ export function Header({ userEmail, userRole, planName }: HeaderProps) {
 
       <div className="flex items-center gap-3">
         <ThemeToggle />
-        <div
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-xs font-bold text-white"
-          style={{ background: '#0F4C75' }}
-        >
+        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
           {userEmail ? userEmail[0].toUpperCase() : 'A'}
         </div>
       </div>

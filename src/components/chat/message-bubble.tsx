@@ -15,15 +15,11 @@ export function MessageBubble({ role, content, isStreaming }: MessageBubbleProps
   if (role === 'user') {
     return (
       <div className="flex max-w-[720px] gap-3 self-end flex-row-reverse">
-        <div
-          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
-          style={{ background: '#0F4C75' }}
-        >
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-bold text-white">
           U
         </div>
         <div
-          className="rounded-2xl rounded-br-md px-4 py-3 text-sm leading-relaxed text-white"
-          style={{ background: '#0F4C75' }}
+          className="rounded-2xl rounded-br-md bg-primary px-4 py-3 text-sm leading-relaxed text-white"
         >
           {content}
         </div>
@@ -33,10 +29,10 @@ export function MessageBubble({ role, content, isStreaming }: MessageBubbleProps
 
   return (
     <div className="flex max-w-[720px] gap-3 self-start">
-      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border" style={{ background: 'var(--muted)' }}>
+      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border bg-muted">
         <Logo variant="icon" size="sm" />
       </div>
-      <div className="min-w-0 rounded-2xl rounded-bl-md px-4 py-3.5 text-sm leading-relaxed" style={{ background: 'var(--muted)' }}>
+      <div className="min-w-0 rounded-2xl rounded-bl-md bg-muted px-4 py-3.5 text-sm leading-relaxed">
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
@@ -50,8 +46,7 @@ export function MessageBubble({ role, content, isStreaming }: MessageBubbleProps
 
               return (
                 <code
-                  className="rounded px-1.5 py-0.5 font-mono text-xs"
-                  style={{ background: 'var(--border)' }}
+                  className="rounded bg-border px-1.5 py-0.5 font-mono text-xs"
                   {...props}
                 >
                   {children}
@@ -60,7 +55,7 @@ export function MessageBubble({ role, content, isStreaming }: MessageBubbleProps
             },
             a({ href, children }) {
               return (
-                <a href={href} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: '#0F4C75' }}>
+                <a href={href} target="_blank" rel="noopener noreferrer" className="underline text-primary">
                   {children}
                 </a>
               );
@@ -71,8 +66,7 @@ export function MessageBubble({ role, content, isStreaming }: MessageBubbleProps
         </ReactMarkdown>
         {isStreaming && (
           <span
-            className="ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-sm align-middle"
-            style={{ background: '#0F4C75' }}
+            className="ml-0.5 inline-block h-4 w-0.5 animate-pulse rounded-sm bg-primary align-middle"
           />
         )}
       </div>

@@ -4,7 +4,29 @@ import { db } from '@/db';
 import { profiles, subscriptions, plans } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-// Verify and construct the Stripe webhook event
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+// Extract subscription ID from invoice (Stripe v20: nested under parent.subscription_details)
+function getSubscriptionIdFromInvoice(invoice: Stripe.Invoice): string | null {
+  const subDetails = invoice.parent?.subscription_details;
+  if (!subDetails) return null;
+  return typeof subDetails.subscription === 'string'
+    ? subDetails.subscription
+    : subDetails.subscription.id;
+}
+
+// Get period dates from the first subscription item (Stripe v20 moved these off Subscription)
+function getPeriodDates(sub: Stripe.Subscription) {
+  const item = sub.items.data[0];
+  if (!item) return null;
+  return {
+    start: new Date(item.current_period_start * 1000),
+    end: new Date(item.current_period_end * 1000),
+  };
+}
+
+// ─── Webhook verification ────────────────────────────────────────────────────
+
 export function verifyWebhook(body: string, signature: string) {
   return stripe.webhooks.constructEvent(
     body,
@@ -12,6 +34,8 @@ export function verifyWebhook(body: string, signature: string) {
     process.env.STRIPE_WEBHOOK_SECRET!,
   );
 }
+
+// ─── Event handlers ──────────────────────────────────────────────────────────
 
 // checkout.session.completed — user completed payment
 export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
@@ -63,20 +87,16 @@ export async function handleCheckoutCompleted(session: Stripe.Checkout.Session) 
 
 // invoice.paid — subscription period renewed
 export async function handleInvoicePaid(invoice: Stripe.Invoice) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawSub = (invoice as any).subscription;
-  const subscriptionId = typeof rawSub === 'string' ? rawSub : rawSub?.id;
+  const subscriptionId = getSubscriptionIdFromInvoice(invoice);
   if (!subscriptionId) return;
 
-  // Retrieve full subscription to get period dates
   const sub = await stripe.subscriptions.retrieve(subscriptionId);
-  const subData = sub as unknown as { current_period_start: number; current_period_end: number };
+  const period = getPeriodDates(sub);
 
   await db
     .update(subscriptions)
     .set({
-      currentPeriodStart: new Date(subData.current_period_start * 1000),
-      currentPeriodEnd: new Date(subData.current_period_end * 1000),
+      ...(period && { currentPeriodStart: period.start, currentPeriodEnd: period.end }),
       status: 'active',
       updatedAt: new Date(),
     })
@@ -85,31 +105,22 @@ export async function handleInvoicePaid(invoice: Stripe.Invoice) {
 
 // customer.subscription.updated — status or plan changed
 export async function handleSubscriptionUpdated(sub: Stripe.Subscription) {
-  const subData = sub as unknown as {
-    id: string;
-    cancel_at_period_end: boolean;
-    status: string;
-    current_period_start: number;
-    current_period_end: number;
-  };
-
-  const status = subData.cancel_at_period_end ? 'canceled' : subData.status;
+  const status = sub.cancel_at_period_end ? 'canceled' : sub.status;
+  const period = getPeriodDates(sub);
 
   await db
     .update(subscriptions)
     .set({
       status: status === 'active' ? 'active' : status === 'past_due' ? 'past_due' : 'canceled',
-      cancelAtPeriodEnd: subData.cancel_at_period_end,
-      currentPeriodStart: new Date(subData.current_period_start * 1000),
-      currentPeriodEnd: new Date(subData.current_period_end * 1000),
+      cancelAtPeriodEnd: sub.cancel_at_period_end,
+      ...(period && { currentPeriodStart: period.start, currentPeriodEnd: period.end }),
       updatedAt: new Date(),
     })
-    .where(eq(subscriptions.stripeSubscriptionId, subData.id));
+    .where(eq(subscriptions.stripeSubscriptionId, sub.id));
 }
 
 // customer.subscription.deleted — subscription fully canceled
 export async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
-  // Mark subscription as canceled
   await db
     .update(subscriptions)
     .set({ status: 'canceled', updatedAt: new Date() })
@@ -132,9 +143,7 @@ export async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
 
 // invoice.payment_failed — payment didn't go through
 export async function handlePaymentFailed(invoice: Stripe.Invoice) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rawSub = (invoice as any).subscription;
-  const subscriptionId = typeof rawSub === 'string' ? rawSub : rawSub?.id;
+  const subscriptionId = getSubscriptionIdFromInvoice(invoice);
   if (!subscriptionId) return;
 
   await db

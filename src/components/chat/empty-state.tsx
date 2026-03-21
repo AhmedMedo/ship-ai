@@ -16,9 +16,9 @@ const suggestedPrompts = [
 export function EmptyState({ onSelectPrompt }: EmptyStateProps) {
   return (
     <div className="flex h-full flex-col items-center justify-center">
-      <MessageSquare className="h-12 w-12" style={{ color: '#94A3B8', opacity: 0.5 }} />
+      <MessageSquare className="h-12 w-12 text-muted-foreground/50" />
       <h3 className="mt-4 text-lg font-semibold">Start a conversation</h3>
-      <p className="mt-1 text-sm" style={{ color: '#94A3B8' }}>
+      <p className="mt-1 text-sm text-muted-foreground">
         Ask anything — code, ideas, debugging, or explanations.
       </p>
       <div className="mt-6 flex max-w-[480px] flex-wrap justify-center gap-2">

@@ -8,7 +8,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const planName = 'Pro';
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--muted)' }}>
+    <div className="flex h-screen overflow-hidden bg-muted">
       {/* Sidebar — hidden on mobile, visible on md+ */}
       <div className="hidden md:flex">
         <Sidebar userEmail={userEmail} userRole={userRole} planName={planName} />

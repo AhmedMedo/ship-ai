@@ -34,13 +34,11 @@ export function Sidebar({ userEmail, userRole, planName = 'Free' }: SidebarProps
   }
 
   return (
-    <aside className="flex h-full w-64 flex-shrink-0 flex-col border-r" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
-      {/* Logo */}
+    <aside className="flex h-full w-64 flex-shrink-0 flex-col border-r bg-card">
       <div className="px-5 py-5">
         <Logo size="md" />
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-3 py-1">
         {mainNav.map((item) => {
           const active = isActive(item.href);
@@ -51,10 +49,9 @@ export function Sidebar({ userEmail, userRole, planName = 'Free' }: SidebarProps
               className={cn(
                 'my-0.5 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                 active
-                  ? 'text-white'
-                  : 'hover:bg-[var(--muted)]',
+                  ? 'bg-primary text-white'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
-              style={active ? { background: '#0F4C75', color: '#fff' } : { color: '#475569' }}
             >
               <item.icon className="h-[18px] w-[18px]" />
               {item.label}
@@ -62,11 +59,10 @@ export function Sidebar({ userEmail, userRole, planName = 'Free' }: SidebarProps
           );
         })}
 
-        {/* Admin section */}
         {userRole === 'admin' && (
           <>
-            <div className="mx-3 my-2 h-px" style={{ background: 'var(--border)' }} />
-            <div className="px-3 pb-1.5 pt-3 text-[11px] font-bold uppercase tracking-wider" style={{ color: '#94A3B8' }}>
+            <div className="mx-3 my-2 h-px bg-border" />
+            <div className="px-3 pb-1.5 pt-3 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Admin
             </div>
             {adminNav.map((item) => {
@@ -78,10 +74,9 @@ export function Sidebar({ userEmail, userRole, planName = 'Free' }: SidebarProps
                   className={cn(
                     'my-0.5 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
                     active
-                      ? 'text-white'
-                      : 'hover:bg-[var(--muted)]',
+                      ? 'bg-primary text-white'
+                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                   )}
-                  style={active ? { background: '#0F4C75', color: '#fff' } : { color: '#475569' }}
                 >
                   <item.icon className="h-[18px] w-[18px]" />
                   {item.label}
@@ -92,15 +87,11 @@ export function Sidebar({ userEmail, userRole, planName = 'Free' }: SidebarProps
         )}
       </nav>
 
-      {/* Bottom */}
-      <div className="border-t px-4 py-4" style={{ borderColor: 'var(--border)' }}>
-        <div
-          className="mb-2 inline-flex rounded-md px-2.5 py-1 text-xs font-bold"
-          style={{ background: '#E8F4FD', color: '#0F4C75' }}
-        >
+      <div className="border-t px-4 py-4">
+        <div className="mb-2 inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
           {planName} plan
         </div>
-        <div className="truncate text-xs" style={{ color: '#94A3B8' }}>
+        <div className="truncate text-xs text-muted-foreground">
           {userEmail || 'user@example.com'}
         </div>
       </div>

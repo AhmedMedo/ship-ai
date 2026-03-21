@@ -45,22 +45,21 @@ export default function BillingPage() {
     <>
       <h2 className="mb-4 text-lg font-bold">Billing</h2>
 
-      <div className="rounded-xl border p-6" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
+      <div className="rounded-xl border bg-card p-6">
         <div className="flex items-start justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <CreditCard className="h-5 w-5" style={{ color: '#475569' }} />
+              <CreditCard className="h-5 w-5 text-muted-foreground" />
               <h3 className="text-base font-bold">Current plan</h3>
             </div>
             <div className="mt-3">
               <span
-                className="inline-flex rounded-md px-2.5 py-1 text-xs font-bold"
-                style={{ background: '#E8F4FD', color: '#0F4C75' }}
+                className="inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary"
               >
                 {currentPlan}
               </span>
             </div>
-            <p className="mt-2 text-sm" style={{ color: '#94A3B8' }}>
+            <p className="mt-2 text-sm text-muted-foreground">
               {hasSubscription ? 'Your subscription renews automatically.' : 'Upgrade to unlock more features.'}
             </p>
           </div>
@@ -80,7 +79,7 @@ export default function BillingPage() {
               <Button
                 onClick={handleCheckout}
                 disabled={loading}
-                style={{ backgroundColor: '#0F4C75', color: '#fff' }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Upgrade to Pro
               </Button>

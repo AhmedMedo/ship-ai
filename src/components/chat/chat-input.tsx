@@ -43,7 +43,7 @@ export function ChatInput({
   }
 
   return (
-    <div className="flex-shrink-0 border-t px-5 py-4" style={{ borderColor: 'var(--border)' }}>
+    <div className="flex-shrink-0 border-t px-5 py-4">
       <form onSubmit={onSubmit}>
         <div className="relative">
           <textarea
@@ -58,22 +58,21 @@ export function ChatInput({
             style={{
               minHeight: '48px',
               maxHeight: '160px',
-              background: 'var(--card)',
-              borderColor: 'var(--border)',
-              color: 'var(--foreground)',
+              background: 'var(--color-card)',
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-foreground)',
             }}
           />
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className="absolute bottom-2.5 right-2.5 flex h-[34px] w-[34px] items-center justify-center rounded-[10px] transition-all hover:scale-105 disabled:opacity-50"
-            style={{ background: '#0F4C75' }}
+            className="absolute bottom-2.5 right-2.5 flex h-[34px] w-[34px] items-center justify-center rounded-[10px] bg-primary transition-all hover:scale-105 disabled:opacity-50"
           >
             <Send className="h-4 w-4 text-white" />
           </button>
         </div>
       </form>
-      <div className="flex justify-between px-1 pt-1.5 text-[11px]" style={{ color: '#94A3B8' }}>
+      <div className="flex justify-between px-1 pt-1.5 text-[11px] text-muted-foreground">
         <span>Model: {model}</span>
         <span>{tokensUsed.toLocaleString()} / {tokenLimit.toLocaleString()} tokens today</span>
       </div>
