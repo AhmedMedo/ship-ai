@@ -16,7 +16,7 @@ export function CtaSection() {
   }, []);
 
   return (
-    <section className="relative z-[1] px-6 pb-[120px]" ref={ref}>
+    <section className="relative z-[1] px-6 pb-20 pt-4" ref={ref}>
       <div
         className="reveal-item relative mx-auto max-w-[1200px] overflow-hidden rounded-3xl border px-10 py-20 text-center"
         style={{

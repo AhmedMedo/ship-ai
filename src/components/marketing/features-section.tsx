@@ -66,10 +66,10 @@ export function FeaturesSection() {
   }, []);
 
   return (
-    <section id="features" className="relative z-[1] py-[120px]" ref={sectionRef}>
+    <section id="features" className="relative z-[1] py-20" ref={sectionRef}>
       <div className="mx-auto max-w-[1200px] px-6">
         <div
-          className="reveal-item mb-3 text-center text-[12px] font-bold uppercase tracking-[2px]"
+          className="reveal-item mb-3 text-center text-[15px] font-bold uppercase tracking-[2px]"
           style={{
             background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
             WebkitBackgroundClip: 'text',

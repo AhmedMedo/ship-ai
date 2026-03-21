@@ -4,7 +4,7 @@
 
 export function DemoSection() {
   return (
-    <section className="relative z-[1] px-6 pb-[120px] pt-10">
+    <section className="relative z-[1] px-6 pb-16 pt-4">
       <div className="mx-auto max-w-[960px]">
         <div
           className="overflow-hidden rounded-2xl"
