@@ -10,11 +10,12 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - /app/.next
+      - nextjs_cache:/app/.next
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
       - WATCHPACK_POLLING=true
+      - NEXT_PRIVATE_LOCAL_WEBPACK=true
     env_file:
       - .env.local
     depends_on:
@@ -198,3 +199,4 @@ volumes:
   db-data:
   storage-data:
   inbucket-data:
+  nextjs_cache:
