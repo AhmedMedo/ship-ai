@@ -3,7 +3,7 @@ import { Header } from '@/components/dashboard/header';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   // TODO: Fetch real user data server-side once auth is wired
-  const userEmail = 'alex@shipai.dev';
+  const userEmail = 'alex@ignitra.dev';
   const userRole = 'admin';
   const planName = 'Pro';
 

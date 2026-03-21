@@ -10,11 +10,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'ShipAI — AI-Powered SaaS Boilerplate',
-    template: '%s | ShipAI',
+    default: 'Ignitra — The AI-Native SaaS Boilerplate',
+    template: '%s | Ignitra',
   },
   description:
-    'Launch your AI SaaS in days, not months. Production-ready Next.js boilerplate with streaming chat, multi-provider AI, usage tracking, and Stripe billing.',
+    'Launch your AI SaaS in days, not months. Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing.',
   icons: {
     icon: '/favicon.svg',
     apple: '/favicon.svg',

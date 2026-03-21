@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════
--- ShipAI — Row Level Security policies and triggers
+-- Ignitra — Row Level Security policies and triggers
 -- Run after Drizzle schema is pushed (drizzle-kit push)
 -- ═══════════════════════════════════════════════════════════
 

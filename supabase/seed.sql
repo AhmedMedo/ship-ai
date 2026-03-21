@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════
--- ShipAI — Seed data
+-- Ignitra — Seed data
 -- Run after schema is pushed: docker compose exec app pnpm db:seed
 -- This file is also mounted into Docker for auto-run on first start.
 -- ═══════════════════════════════════════════════════════════

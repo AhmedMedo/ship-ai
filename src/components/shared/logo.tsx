@@ -7,13 +7,14 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { icon: 24, text: 16, gap: 6 },
-  md: { icon: 32, text: 20, gap: 8 },
-  lg: { icon: 40, text: 26, gap: 10 },
+  sm: { icon: 24, text: 14, gap: 6 },
+  md: { icon: 32, text: 18, gap: 8 },
+  lg: { icon: 40, text: 22, gap: 10 },
 };
 
 export function Logo({ variant = 'full', size = 'md', className }: LogoProps) {
   const s = sizes[size];
+
   const icon = (
     <svg
       width={s.icon}
@@ -25,35 +26,35 @@ export function Logo({ variant = 'full', size = 'md', className }: LogoProps) {
     >
       <rect width="40" height="40" rx="10" fill="#0F4C75" />
       <path
-        d="M12 28L20 12L28 28"
+        d="M13 28L20 10L27 28"
         stroke="white"
         strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="20" cy="12" r="2.5" fill="#3498DB" />
-      <line
-        x1="14"
-        y1="22"
-        x2="26"
-        y2="22"
+      <path
+        d="M15.5 22H24.5"
         stroke="white"
         strokeWidth="2"
         strokeLinecap="round"
       />
+      <circle cx="20" cy="10" r="3" fill="#E8593C" />
+      <circle cx="20" cy="10" r="1.5" fill="#FCDE5A" />
     </svg>
   );
+
   const text = (
     <span
       style={{ fontSize: s.text, fontWeight: 800, letterSpacing: '-0.02em' }}
       className="text-foreground"
     >
-      Ship<span className="text-[#0F4C75] dark:text-[#3498DB]">AI</span>
+      Ignitra
     </span>
   );
+
   if (variant === 'icon') return <span className={cn('inline-flex', className)}>{icon}</span>;
-  if (variant === 'text')
-    return <span className={cn('inline-flex items-center', className)}>{text}</span>;
+  if (variant === 'text') return <span className={cn('inline-flex items-center', className)}>{text}</span>;
+
   return (
     <span className={cn('inline-flex items-center', className)} style={{ gap: s.gap }}>
       {icon}

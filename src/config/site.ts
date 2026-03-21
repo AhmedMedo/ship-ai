@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'ShipAI',
-  description: 'Launch your AI SaaS in days, not months.',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  name: 'Ignitra',
+  description: 'The AI-native SaaS boilerplate',
+  url: process.env.NEXT_PUBLIC_APP_URL || 'https://ignitra.dev',
 };

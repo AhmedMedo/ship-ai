@@ -74,7 +74,7 @@ export default function LoginPage() {
 
         <h1 className="text-center text-2xl font-extrabold">Welcome back</h1>
         <p className="mb-7 mt-1.5 text-center text-sm" style={{ color: '#475569' }}>
-          Sign in to your ShipAI account
+          Sign in to your Ignitra account
         </p>
 
         {/* Error message */}
