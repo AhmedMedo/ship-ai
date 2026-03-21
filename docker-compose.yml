@@ -10,7 +10,6 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-      - nextjs_cache:/app/.next
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
@@ -199,4 +198,3 @@ volumes:
   db-data:
   storage-data:
   inbucket-data:
-  nextjs_cache:
