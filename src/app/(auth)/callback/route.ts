@@ -1,6 +1,22 @@
-// TODO: OAuth callback handler
 import { NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
 
-export async function GET() {
-  return NextResponse.redirect(new URL('/dashboard', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'));
+// Handles the OAuth redirect callback from Supabase Auth
+// Exchanges the auth code for a session, then redirects to dashboard
+export async function GET(request: Request) {
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get('code');
+  const next = searchParams.get('next') ?? '/dashboard';
+
+  if (code) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      return NextResponse.redirect(`${origin}${next}`);
+    }
+  }
+
+  // Auth code exchange failed — redirect to login with error
+  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
 }
