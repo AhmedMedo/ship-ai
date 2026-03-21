@@ -21,6 +21,7 @@
     "@ai-sdk/anthropic": "latest",
     "@ai-sdk/google": "latest",
     "@ai-sdk/openai": "latest",
+    "@ai-sdk/react": "latest",
     "@react-email/components": "latest",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",

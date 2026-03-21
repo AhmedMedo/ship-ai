@@ -1,4 +1,5 @@
-// TODO: New chat page
+import { ChatContainer } from '@/components/chat/chat-container';
+
 export default function NewChatPage() {
-  return <div>New Chat</div>;
+  return <ChatContainer />;
 }
