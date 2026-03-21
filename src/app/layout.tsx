@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@/components/shared/theme-provider';
 import '@/app/globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen antialiased" suppressHydrationWarning>
+      <body className={`${inter.variable} min-h-screen font-sans antialiased`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>

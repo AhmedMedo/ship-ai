@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/shared/logo';
+import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
@@ -64,15 +65,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/50 p-6">
+    <div className="flex min-h-screen items-center justify-center bg-muted/50 p-4">
       <div className="w-full max-w-[420px] rounded-2xl border bg-card p-10">
-        {/* Logo */}
+        {/* Logo — blue square with rocket mark, NOT a circle avatar */}
         <div className="mb-7 flex justify-center">
           <Logo variant="icon" size="lg" />
         </div>
 
         <h1 className="text-center text-2xl font-extrabold">Welcome back</h1>
-        <p className="mb-7 mt-1.5 text-center text-sm text-muted-foreground">
+        <p className="mb-7 mt-1.5 text-center text-sm" style={{ color: '#475569' }}>
           Sign in to your ShipAI account
         </p>
 
@@ -118,10 +119,10 @@ export default function LoginPage() {
         </div>
 
         {/* Divider */}
-        <div className="my-6 flex items-center gap-3.5 text-xs font-medium text-muted-foreground">
-          <div className="h-px flex-1 bg-border" />
+        <div className="my-6 flex items-center gap-3.5 text-xs font-medium" style={{ color: '#94A3B8' }}>
+          <div className="h-px flex-1" style={{ background: '#E2E8F0' }} />
           or continue with email
-          <div className="h-px flex-1 bg-border" />
+          <div className="h-px flex-1" style={{ background: '#E2E8F0' }} />
         </div>
 
         {/* Email/Password form */}
@@ -149,17 +150,18 @@ export default function LoginPage() {
             />
           </div>
           <div className="mb-4 text-right">
-            <Link href="#" className="text-xs font-semibold text-primary">
+            <Link href="#" className="text-xs font-semibold" style={{ color: '#0F4C75' }}>
               Forgot password?
             </Link>
           </div>
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="mt-1 w-full rounded-[10px] bg-primary py-3 text-[15px] font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-50"
+            className="mt-1 w-full rounded-[10px] py-3 text-[15px] font-bold"
+            style={{ backgroundColor: '#0F4C75', color: '#ffffff' }}
           >
             {loading ? 'Signing in...' : 'Sign in'}
-          </button>
+          </Button>
         </form>
 
         {/* Magic link */}
@@ -167,15 +169,16 @@ export default function LoginPage() {
           type="button"
           onClick={handleMagicLink}
           disabled={loading}
-          className="mt-4 block w-full text-center text-[13px] font-semibold text-primary disabled:opacity-50"
+          className="mt-4 block w-full cursor-pointer text-center text-[13px] font-semibold disabled:opacity-50"
+          style={{ color: '#0F4C75' }}
         >
           Send me a magic link instead
         </button>
 
         {/* Footer */}
-        <div className="mt-5 border-t pt-5 text-center text-[13px] text-muted-foreground">
+        <div className="mt-5 pt-5 text-center text-[13px]" style={{ borderTop: '1px solid #E2E8F0', color: '#475569' }}>
           Don&apos;t have an account?{' '}
-          <Link href="/signup" className="font-semibold text-primary">
+          <Link href="/signup" className="font-semibold underline" style={{ color: '#0F4C75' }}>
             Create one
           </Link>
         </div>

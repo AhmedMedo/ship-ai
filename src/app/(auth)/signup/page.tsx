@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/shared/logo';
+import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 
 export default function SignupPage() {
@@ -147,19 +148,20 @@ export default function SignupPage() {
               className="w-full rounded-[10px] border-[1.5px] bg-card px-3.5 py-2.5 text-sm outline-none transition-colors placeholder:text-muted-foreground focus:border-primary"
             />
           </div>
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="mt-1 w-full rounded-[10px] bg-primary py-3 text-[15px] font-bold text-white transition-colors hover:bg-primary/90 disabled:opacity-50"
+            className="mt-1 w-full rounded-[10px] py-3 text-[15px] font-bold"
+            style={{ backgroundColor: '#0F4C75', color: '#ffffff' }}
           >
             {loading ? 'Creating account...' : 'Create account'}
-          </button>
+          </Button>
         </form>
 
         {/* Footer */}
         <div className="mt-5 border-t pt-5 text-center text-[13px] text-muted-foreground">
           Already have an account?{' '}
-          <Link href="/login" className="font-semibold text-primary">
+          <Link href="/login" className="font-semibold text-primary underline">
             Sign in
           </Link>
         </div>
