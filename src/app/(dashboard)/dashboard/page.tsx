@@ -1,19 +1,71 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { MessageSquare, Zap, CreditCard, DollarSign } from 'lucide-react';
+import { MODEL_COLORS } from '@/lib/ai/models';
 
-// TODO: Wire to real data from DB in later tasks
-const stats = {
-  conversations: 24,
-  tokensToday: 4520,
-  tokenLimit: 100000,
-  plan: 'Pro',
-  renewDate: 'Apr 20, 2026',
-  costToday: '$0.07',
-  costMonth: '$2.34',
-};
+interface UsageData {
+  tokensUsed: number;
+  tokenLimit: number;
+  percentUsed: number;
+  costUsd: number;
+  requestCount: number;
+  conversationCount: number;
+  plan: { name: string; slug: string };
+  byModel: Record<string, { tokens: number; cost: number; requests: number }>;
+}
+
+
+// Progress bar color based on DESIGN.md spec
+function barColor(percent: number) {
+  if (percent >= 90) return 'bg-red-500';
+  if (percent >= 70) return 'bg-yellow-500';
+  return 'bg-primary';
+}
 
 export default function DashboardPage() {
-  const usagePercent = (stats.tokensToday / stats.tokenLimit) * 100;
+  const [daily, setDaily] = useState<UsageData | null>(null);
+  const [monthly, setMonthly] = useState<UsageData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const [d, m] = await Promise.all([
+          fetch('/api/usage?period=today').then((r) => r.json()),
+          fetch('/api/usage?period=month').then((r) => r.json()),
+        ]);
+        setDaily(d);
+        setMonthly(m);
+      } catch {
+        // Silently fail — show zeros
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const dailyPercent = daily?.percentUsed ?? 0;
+  const monthlyPercent = monthly?.percentUsed ?? 0;
+
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-28 animate-pulse rounded-xl border bg-card" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {[1, 2].map((i) => (
+            <div key={i} className="h-32 animate-pulse rounded-xl border bg-card" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -25,8 +77,9 @@ export default function DashboardPage() {
             <MessageSquare className="h-4 w-4 opacity-60" />
             Conversations
           </div>
-          <div className="text-[28px] font-extrabold tracking-tight">{stats.conversations}</div>
-          <div className="mt-1 text-xs text-green-500">+3 today</div>
+          <div className="text-[28px] font-extrabold tracking-tight">
+            {daily?.conversationCount ?? 0}
+          </div>
         </div>
 
         {/* Tokens today */}
@@ -35,13 +88,17 @@ export default function DashboardPage() {
             <Zap className="h-4 w-4 opacity-60" />
             Tokens today
           </div>
-          <div className="text-[28px] font-extrabold tracking-tight">{stats.tokensToday.toLocaleString()}</div>
-          <div className="mt-1 text-xs text-muted-foreground">of {stats.tokenLimit.toLocaleString()} daily limit</div>
+          <div className="text-[28px] font-extrabold tracking-tight">
+            {(daily?.tokensUsed ?? 0).toLocaleString()}
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            of {(daily?.tokenLimit ?? 5000).toLocaleString()} daily limit
+          </div>
           <div className="mt-2">
             <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full rounded-full bg-primary"
-                style={{ width: `${usagePercent}%` }}
+                className={`h-full rounded-full transition-all duration-500 ${barColor(dailyPercent)}`}
+                style={{ width: `${Math.min(dailyPercent, 100)}%` }}
               />
             </div>
           </div>
@@ -55,10 +112,9 @@ export default function DashboardPage() {
           </div>
           <div className="mt-2">
             <span className="inline-flex rounded-md bg-primary/10 px-2 py-[3px] text-xs font-bold text-primary">
-              {stats.plan}
+              {daily?.plan?.name ?? 'Free'}
             </span>
           </div>
-          <div className="mt-1 text-xs text-muted-foreground">Renews {stats.renewDate}</div>
         </div>
 
         {/* AI cost */}
@@ -67,8 +123,12 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 opacity-60" />
             AI cost today
           </div>
-          <div className="text-[28px] font-extrabold tracking-tight">{stats.costToday}</div>
-          <div className="mt-1 text-xs text-muted-foreground">{stats.costMonth} this month</div>
+          <div className="text-[28px] font-extrabold tracking-tight">
+            ${(daily?.costUsd ?? 0).toFixed(2)}
+          </div>
+          <div className="mt-1 text-xs text-muted-foreground">
+            ${(monthly?.costUsd ?? 0).toFixed(2)} this month
+          </div>
         </div>
       </div>
 
@@ -79,14 +139,19 @@ export default function DashboardPage() {
         <div className="rounded-xl border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-sm font-semibold">Daily usage</span>
-            <span className="text-[13px] text-muted-foreground">4,520 / 100,000</span>
+            <span className="text-[13px] text-muted-foreground">
+              {(daily?.tokensUsed ?? 0).toLocaleString()} / {(daily?.tokenLimit ?? 5000).toLocaleString()}
+            </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary" style={{ width: '4.5%' }} />
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${barColor(dailyPercent)}`}
+              style={{ width: `${Math.min(dailyPercent, 100)}%` }}
+            />
           </div>
           <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-            <span>4.5% used</span>
-            <span>95,480 remaining</span>
+            <span>{dailyPercent.toFixed(1)}% used</span>
+            <span>{Math.max(0, (daily?.tokenLimit ?? 5000) - (daily?.tokensUsed ?? 0)).toLocaleString()} remaining</span>
           </div>
         </div>
 
@@ -94,14 +159,19 @@ export default function DashboardPage() {
         <div className="rounded-xl border bg-card p-5">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-sm font-semibold">Monthly usage</span>
-            <span className="text-[13px] text-muted-foreground">145,200 / 3,000,000</span>
+            <span className="text-[13px] text-muted-foreground">
+              {(monthly?.tokensUsed ?? 0).toLocaleString()} / {(monthly?.tokenLimit ?? 50000).toLocaleString()}
+            </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary" style={{ width: '4.8%' }} />
+            <div
+              className={`h-full rounded-full transition-all duration-500 ${barColor(monthlyPercent)}`}
+              style={{ width: `${Math.min(monthlyPercent, 100)}%` }}
+            />
           </div>
           <div className="mt-2 flex justify-between text-xs text-muted-foreground">
-            <span>4.8% used</span>
-            <span>2,854,800 remaining</span>
+            <span>{monthlyPercent.toFixed(1)}% used</span>
+            <span>{Math.max(0, (monthly?.tokenLimit ?? 50000) - (monthly?.tokensUsed ?? 0)).toLocaleString()} remaining</span>
           </div>
         </div>
       </div>
@@ -119,69 +189,39 @@ export default function DashboardPage() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border-b px-4 py-3 text-[13px]">
-                <div className="flex items-center gap-2 font-semibold">
-                  <div className="h-2 w-2 rounded-full bg-chart-2" />
-                  gpt-4o-mini
-                </div>
-              </td>
-              <td className="border-b px-4 py-3 text-[13px]">18</td>
-              <td className="border-b px-4 py-3 text-[13px]">3,200</td>
-              <td className="border-b px-4 py-3 text-[13px]">$0.003</td>
-            </tr>
-            <tr>
-              <td className="border-b px-4 py-3 text-[13px]">
-                <div className="flex items-center gap-2 font-semibold">
-                  <div className="h-2 w-2 rounded-full bg-accent" />
-                  claude-3-haiku
-                </div>
-              </td>
-              <td className="border-b px-4 py-3 text-[13px]">4</td>
-              <td className="border-b px-4 py-3 text-[13px]">1,120</td>
-              <td className="border-b px-4 py-3 text-[13px]">$0.006</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-3 text-[13px]">
-                <div className="flex items-center gap-2 font-semibold">
-                  <div className="h-2 w-2 rounded-full bg-chart-3" />
-                  gpt-4o
-                </div>
-              </td>
-              <td className="px-4 py-3 text-[13px]">2</td>
-              <td className="px-4 py-3 text-[13px]">200</td>
-              <td className="px-4 py-3 text-[13px]">$0.061</td>
-            </tr>
+            {daily?.byModel && Object.keys(daily.byModel).length > 0 ? (
+              Object.entries(daily.byModel).map(([model, data], i, arr) => (
+                <tr key={model}>
+                  <td className={`px-4 py-3 text-[13px] ${i < arr.length - 1 ? 'border-b' : ''}`}>
+                    <div className="flex items-center gap-2 font-semibold">
+                      <div
+                        className="h-2 w-2 rounded-full"
+                        style={{ background: MODEL_COLORS[model] ?? '#94A3B8' }}
+                      />
+                      {model}
+                    </div>
+                  </td>
+                  <td className={`px-4 py-3 text-[13px] ${i < arr.length - 1 ? 'border-b' : ''}`}>{data.requests}</td>
+                  <td className={`px-4 py-3 text-[13px] ${i < arr.length - 1 ? 'border-b' : ''}`}>{data.tokens.toLocaleString()}</td>
+                  <td className={`px-4 py-3 text-[13px] ${i < arr.length - 1 ? 'border-b' : ''}`}>${data.cost.toFixed(4)}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="px-4 py-8 text-center text-sm text-muted-foreground">
+                  No usage data yet. Start chatting to see model breakdown.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {/* Recent conversations */}
-      <h2 className="mb-3.5 text-base font-bold">Recent conversations</h2>
-      <div className="overflow-hidden rounded-xl border bg-card">
-        <div className="flex items-center justify-between border-b px-4 py-4">
-          <h3 className="text-[15px] font-bold">Today</h3>
-          <Link href="/dashboard/chat" className="text-[13px] font-semibold text-primary">View all</Link>
-        </div>
-        {[
-          { title: 'Explain React hooks', meta: '12 messages · gpt-4o-mini · 2 min ago', tokens: '1,234 tokens' },
-          { title: 'Python FastAPI authentication setup', meta: '8 messages · claude-3-haiku · 1 hour ago', tokens: '890 tokens' },
-          { title: 'Docker multi-stage builds', meta: '5 messages · gpt-4o-mini · 3 hours ago', tokens: '652 tokens' },
-        ].map((item, i) => (
-          <div
-            key={i}
-            className="flex items-center gap-3 border-b px-4 py-3.5 last:border-b-0"
-          >
-            <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
-              <MessageSquare className="h-[18px] w-[18px] text-primary" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] font-semibold">{item.title}</div>
-              <div className="mt-0.5 text-[11px] text-muted-foreground">{item.meta}</div>
-            </div>
-            <div className="flex-shrink-0 text-xs font-semibold text-muted-foreground">{item.tokens}</div>
-          </div>
-        ))}
+      {/* Quick link to full usage page */}
+      <div className="text-center">
+        <Link href="/dashboard/usage" className="text-sm font-semibold text-primary">
+          View detailed usage →
+        </Link>
       </div>
     </>
   );

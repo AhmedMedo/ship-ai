@@ -4,6 +4,7 @@ import { getModel } from '@/lib/ai/provider';
 import { MODELS } from '@/lib/ai/models';
 import { calculateCost } from '@/lib/ai/models';
 import { checkUsageLimit, logUsage } from '@/lib/ai/usage';
+import { reportUsageToStripe } from '@/lib/billing/usage-reporting';
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/ai/prompts';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/db';
@@ -126,7 +127,10 @@ export async function POST(req: Request) {
           },
         ]);
 
-        // 9. Update conversation stats
+        // 9. Report usage to Stripe (Business plan only)
+        await reportUsageToStripe(user.id, inputTokens + outputTokens);
+
+        // 10. Update conversation stats
         await db
           .update(conversations)
           .set({

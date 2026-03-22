@@ -30,6 +30,19 @@ export const MODEL_PRICING: Record<string, { input: number; output: number }> = 
   [MODELS.GEMINI_PRO]: { input: 1.25, output: 5.00 },
 };
 
+// ─── Model Colors ────────────────────────────────────────────────────────────
+// Used in dashboard charts and model breakdown tables.
+
+export const MODEL_COLORS: Record<string, string> = {
+  [MODELS.GPT_4O_MINI]: '#22C55E',
+  [MODELS.GPT_4O]: '#EAB308',
+  [MODELS.GPT_35_TURBO]: '#F97316',
+  [MODELS.CLAUDE_HAIKU]: '#3498DB',
+  [MODELS.CLAUDE_SONNET]: '#8B5CF6',
+  [MODELS.GEMINI_FLASH]: '#06B6D4',
+  [MODELS.GEMINI_PRO]: '#EF4444',
+};
+
 // ─── Default fallback pricing for unknown models ────────────────────────────
 const FALLBACK_PRICING = { input: 0.15, output: 0.60 };
 
