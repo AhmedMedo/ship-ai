@@ -1,19 +1,107 @@
 ---
 title: "Getting Started with Ignitra"
 date: "2026-03-20"
-excerpt: "Learn how to set up and customize Ignitra for your AI SaaS product."
+excerpt: "Learn how to set up and customize Ignitra for your AI SaaS product in under 30 minutes."
 author: "Ignitra Team"
 ---
 
 # Getting Started with Ignitra
 
-Welcome to Ignitra! This guide will walk you through setting up your AI-powered SaaS product.
+Welcome to Ignitra — the AI-native SaaS boilerplate that lets you launch your product in days, not months. This guide walks you through setup, configuration, and your first deployment.
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- **Node.js 18+** and **pnpm** installed
+- **Docker Desktop** running (for local Supabase)
+- API keys for at least one AI provider (OpenAI, Anthropic, or Google)
+- A **Stripe** account for payments (test mode is fine)
 
 ## Quick Start
 
-1. Clone the repository
-2. Configure your environment variables
-3. Start the Docker services
-4. Begin customizing for your product
+### 1. Clone and install
 
-More detailed instructions coming soon.
+```bash
+git clone https://github.com/your-org/ignitra.git my-ai-saas
+cd my-ai-saas
+pnpm install
+```
+
+### 2. Configure environment
+
+Copy the example env file and fill in your keys:
+
+```bash
+cp .env.docker.example .env.local
+```
+
+The key variables you need to set:
+
+| Variable | Description |
+|----------|-------------|
+| `AI_PROVIDER` | `openai`, `anthropic`, or `google` |
+| `OPENAI_API_KEY` | Your OpenAI API key |
+| `STRIPE_SECRET_KEY` | Stripe secret key (starts with `sk_test_`) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret |
+
+### 3. Start Docker services
+
+```bash
+docker compose up -d
+```
+
+This spins up PostgreSQL, Supabase Auth, Storage, Studio, and an email catcher — all locally.
+
+### 4. Run the app
+
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) and you should see the Ignitra landing page.
+
+## What's Included
+
+Ignitra ships with everything you need for a production AI SaaS:
+
+- **Authentication** — Google, GitHub OAuth, magic link, email/password via Supabase Auth
+- **AI Streaming Chat** — Real-time token streaming with markdown and syntax highlighting
+- **Multi-Provider AI** — Switch between OpenAI, Anthropic, and Google with one env var
+- **Stripe Billing** — Subscriptions, checkout, customer portal, webhook handling
+- **Token Tracking** — Per-user daily/monthly limits with usage analytics dashboard
+- **Admin Panel** — User management, stats, and system overview
+- **Dark Mode** — Full theme support across every page
+
+## Customizing for Your Product
+
+### Change the branding
+
+Update `src/components/shared/logo.tsx` with your own logo SVG. The brand colors live in `src/app/globals.css` — swap the primary color values and the entire UI updates.
+
+### Add AI models
+
+Edit `src/lib/ai/models.ts` to add new models or adjust pricing. The provider factory in `src/lib/ai/provider.ts` handles the abstraction.
+
+### Modify plans
+
+Plan definitions live in `src/config/plans.ts`. Update the features, limits, and Stripe price IDs to match your product.
+
+## Deploying to Production
+
+Ignitra is optimized for Vercel deployment:
+
+1. Push your repo to GitHub
+2. Import it in [Vercel](https://vercel.com)
+3. Add your environment variables
+4. Deploy
+
+That's it. Your AI SaaS is live.
+
+## Next Steps
+
+- Explore the [dashboard](/dashboard) to see the chat UI, usage tracking, and billing
+- Check the admin panel at `/admin` for user management
+- Read the codebase — every file has comments explaining what it does and why
+
+Happy shipping!

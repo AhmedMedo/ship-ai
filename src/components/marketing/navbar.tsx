@@ -9,7 +9,7 @@ const navLinks = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'Docs', href: '#' },
-  { label: 'Blog', href: '#' },
+  { label: 'Blog', href: '/blog' },
 ];
 
 function scrollTo(href: string) {
@@ -43,18 +43,31 @@ export function Navbar() {
 
         {/* Desktop nav links */}
         <div className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => scrollTo(link.href)}
-              className="text-[14px] font-medium transition-colors"
-              style={{ color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#F1F5F9')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#94A3B8')}
-            >
-              {link.label}
-            </button>
-          ))}
+          {navLinks.map((link) =>
+            link.href.startsWith('#') ? (
+              <button
+                key={link.label}
+                onClick={() => scrollTo(link.href)}
+                className="text-[14px] font-medium transition-colors"
+                style={{ color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F1F5F9')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#94A3B8')}
+              >
+                {link.label}
+              </button>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="text-[14px] font-medium transition-colors"
+                style={{ color: '#94A3B8' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = '#F1F5F9')}
+                onMouseLeave={(e) => (e.currentTarget.style.color = '#94A3B8')}
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
         </div>
 
         {/* Desktop CTA */}
@@ -116,16 +129,28 @@ export function Navbar() {
             background: 'rgba(3,0,20,0.95)',
           }}
         >
-          {navLinks.map((link) => (
-            <button
-              key={link.label}
-              onClick={() => { scrollTo(link.href); setOpen(false); }}
-              className="block w-full py-2.5 text-left text-sm font-medium"
-              style={{ color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              {link.label}
-            </button>
-          ))}
+          {navLinks.map((link) =>
+            link.href.startsWith('#') ? (
+              <button
+                key={link.label}
+                onClick={() => { scrollTo(link.href); setOpen(false); }}
+                className="block w-full py-2.5 text-left text-sm font-medium"
+                style={{ color: '#94A3B8', background: 'none', border: 'none', cursor: 'pointer' }}
+              >
+                {link.label}
+              </button>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="block py-2.5 text-sm font-medium"
+                style={{ color: '#94A3B8' }}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ),
+          )}
           <div className="mt-4 flex flex-col gap-2">
             <Link
               href="/login"
