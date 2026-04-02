@@ -1,5 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Logo } from '@/components/shared/logo';
+import { LogOut } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
 // Admin layout — role guard is handled by middleware (src/lib/supabase/middleware.ts).
 // Non-admins are redirected to /dashboard before reaching this layout.
@@ -31,13 +35,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </Link>
           ))}
         </nav>
-        <div className="border-t px-4 py-4">
+        <div className="space-y-2 border-t px-4 py-4">
           <Link
             href="/dashboard"
-            className="text-xs font-semibold text-primary"
+            className="block text-xs font-semibold text-primary"
           >
             ← Back to Dashboard
           </Link>
+          <button
+            onClick={async () => {
+              const supabase = createClient();
+              await supabase.auth.signOut();
+              window.location.href = '/login';
+            }}
+            className="flex items-center gap-1.5 text-xs font-medium text-destructive"
+          >
+            <LogOut className="h-3 w-3" />
+            Log out
+          </button>
         </div>
       </aside>
 
