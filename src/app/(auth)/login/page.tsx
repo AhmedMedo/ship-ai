@@ -29,7 +29,7 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error, data } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setError(error.message);
@@ -37,7 +37,18 @@ export default function LoginPage() {
       return;
     }
 
-    router.push('/dashboard');
+    // Redirect admin users to /admin, others to /dashboard
+    if (data?.user) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      router.push(profile?.role === 'admin' ? '/admin' : '/dashboard');
+    } else {
+      router.push('/dashboard');
+    }
     router.refresh();
   }
 
