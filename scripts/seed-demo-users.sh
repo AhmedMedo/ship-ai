@@ -20,7 +20,7 @@ ADMIN_RESULT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$GOTRUE_URL/admin
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
-  -d '{"email":"admin@ignitra.dev","password":"admin123","email_confirm":true,"user_metadata":{"full_name":"Admin User"}}')
+  -d '{"email":"admin@ignitra.dev","password":"admin123","email_confirm":true,"role":"authenticated","user_metadata":{"full_name":"Admin User"}}')
 
 if [ "$ADMIN_RESULT" = "200" ]; then
   echo "✓ Admin user created: admin@ignitra.dev / admin123"
@@ -35,7 +35,7 @@ USER_RESULT=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$GOTRUE_URL/admin/
   -H "Content-Type: application/json" \
   -H "apikey: $SERVICE_KEY" \
   -H "Authorization: Bearer $SERVICE_KEY" \
-  -d '{"email":"user@ignitra.dev","password":"user123","email_confirm":true,"user_metadata":{"full_name":"Demo User"}}')
+  -d '{"email":"user@ignitra.dev","password":"user123","email_confirm":true,"role":"authenticated","user_metadata":{"full_name":"Demo User"}}')
 
 if [ "$USER_RESULT" = "200" ]; then
   echo "✓ Demo user created: user@ignitra.dev / user123"
@@ -45,9 +45,10 @@ else
   echo "✗ Failed to create demo user (HTTP $USER_RESULT)"
 fi
 
-# Set admin role + Pro plan via direct DB update
-echo "Setting admin role and Pro plan..."
+# Ensure auth.users have correct role/aud (GoTrue Admin API sometimes leaves them empty)
+echo "Setting auth roles..."
 docker compose exec -T db psql -U postgres -d postgres -c "
+  UPDATE auth.users SET role = 'authenticated', aud = 'authenticated' WHERE email IN ('admin@ignitra.dev', 'user@ignitra.dev') AND (role = '' OR role IS NULL);
   UPDATE profiles SET role = 'admin', plan_id = (SELECT id FROM plans WHERE slug = 'pro' LIMIT 1) WHERE email = 'admin@ignitra.dev';
 " 2>/dev/null
 
