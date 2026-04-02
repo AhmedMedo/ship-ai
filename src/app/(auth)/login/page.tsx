@@ -170,6 +170,31 @@ export default function LoginPage() {
           Send me a magic link instead
         </button>
 
+        {/* Demo accounts — quick fill for testing */}
+        <div className="mt-5 border-t pt-5">
+          <p className="mb-2.5 text-center text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Demo accounts
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => { setEmail('admin@ignitra.dev'); setPassword('admin123'); }}
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border bg-muted/50 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-muted"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-primary/10 text-[9px] font-bold text-primary">A</span>
+              Admin
+            </button>
+            <button
+              type="button"
+              onClick={() => { setEmail('user@ignitra.dev'); setPassword('user123'); }}
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg border bg-muted/50 px-3 py-2 text-[12px] font-medium transition-colors hover:bg-muted"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-muted text-[9px] font-bold text-muted-foreground">U</span>
+              User
+            </button>
+          </div>
+        </div>
+
         <div className="mt-5 border-t pt-5 text-center text-[13px] text-muted-foreground">
           Don&apos;t have an account?{' '}
           <Link href="/signup" className="font-semibold text-primary underline">
