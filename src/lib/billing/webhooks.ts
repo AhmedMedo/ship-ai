@@ -151,5 +151,17 @@ export async function handlePaymentFailed(invoice: Stripe.Invoice) {
     .set({ status: 'past_due', updatedAt: new Date() })
     .where(eq(subscriptions.stripeSubscriptionId, subscriptionId));
 
-  // TODO: Send payment failed email via Resend (Task 14)
+  // Send payment failed email to the customer
+  if (invoice.customer_email) {
+    const { sendEmail } = await import('@/lib/email/resend');
+    const { paymentFailedEmailHtml } = await import('@/lib/email/templates/payment-failed');
+    await sendEmail({
+      to: invoice.customer_email,
+      subject: 'Payment failed — action needed',
+      html: paymentFailedEmailHtml({
+        userName: invoice.customer_name ?? 'there',
+        planName: 'your current',
+      }),
+    });
+  }
 }

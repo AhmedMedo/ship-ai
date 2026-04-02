@@ -45,6 +45,13 @@ export default function SignupPage() {
       return;
     }
 
+    // Send welcome email (fire-and-forget, don't block redirect)
+    fetch('/api/email/welcome', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, userName: fullName || 'there' }),
+    }).catch(() => {});
+
     setSuccess(true);
     setLoading(false);
     router.push('/dashboard');

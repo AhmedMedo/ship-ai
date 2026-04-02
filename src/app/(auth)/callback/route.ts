@@ -13,6 +13,26 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      // Send welcome email for new signups (created within the last 60 seconds)
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email && user.created_at) {
+        const createdAt = new Date(user.created_at).getTime();
+        const isNewUser = Date.now() - createdAt < 60_000;
+        if (isNewUser) {
+          import('@/lib/email/resend').then(({ sendEmail }) =>
+            import('@/lib/email/templates/welcome').then(({ welcomeEmailHtml }) =>
+              sendEmail({
+                to: user.email!,
+                subject: 'Welcome to Ignitra!',
+                html: welcomeEmailHtml({
+                  userName: user.user_metadata?.full_name ?? 'there',
+                }),
+              }),
+            ),
+          );
+        }
+      }
+
       return NextResponse.redirect(`${origin}${next}`);
     }
   }

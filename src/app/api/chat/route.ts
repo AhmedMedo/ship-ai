@@ -106,7 +106,29 @@ export async function POST(req: Request) {
           costUsd,
         });
 
-        // 8. Save user message + assistant response to DB
+        // 8. Check if user crossed 80% usage threshold — send warning email
+        const totalAfter = usageCheck.used + inputTokens + outputTokens;
+        const wasBelow80 = usageCheck.used / usageCheck.limit < 0.8;
+        const isAbove80 = totalAfter / usageCheck.limit >= 0.8;
+
+        if (wasBelow80 && isAbove80 && user.email) {
+          import('@/lib/email/resend').then(({ sendEmail }) =>
+            import('@/lib/email/templates/usage-warning').then(({ usageWarningEmailHtml }) =>
+              sendEmail({
+                to: user.email!,
+                subject: 'You have used 80% of your daily tokens',
+                html: usageWarningEmailHtml({
+                  userName: user.user_metadata?.full_name ?? 'there',
+                  tokensUsed: totalAfter,
+                  tokenLimit: usageCheck.limit,
+                  planName: usageCheck.planSlug,
+                }),
+              }),
+            ),
+          );
+        }
+
+        // 9. Save user message + assistant response to DB
         const userMsg = userMessages[userMessages.length - 1];
         const assistantText = await result.text;
 
