@@ -37,19 +37,10 @@ export default function LoginPage() {
       return;
     }
 
-    // Redirect admin users to /admin, others to /dashboard
-    if (data?.user) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
-
-      router.push(profile?.role === 'admin' ? '/admin' : '/dashboard');
-    } else {
-      router.push('/dashboard');
-    }
-    router.refresh();
+    // Role is in app_metadata (set via GoTrue Admin API, included in JWT)
+    // Use window.location for a full page navigation so middleware picks up the new session
+    const role = data?.user?.app_metadata?.role;
+    window.location.href = role === 'admin' ? '/admin' : '/dashboard';
   }
 
   async function handleMagicLink() {

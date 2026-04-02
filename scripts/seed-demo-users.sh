@@ -45,10 +45,20 @@ else
   echo "✗ Failed to create demo user (HTTP $USER_RESULT)"
 fi
 
-# Ensure auth.users have correct role/aud (GoTrue Admin API sometimes leaves them empty)
-echo "Setting auth roles..."
+# Set admin role in app_metadata (included in JWT — no extra DB queries needed)
+echo "Setting admin role in app_metadata..."
+ADMIN_ID=$(docker compose exec -T db psql -U postgres -d postgres -t -A -c "SELECT id FROM auth.users WHERE email='admin@ignitra.dev';")
+if [ -n "$ADMIN_ID" ]; then
+  curl -s -X PUT "$GOTRUE_URL/admin/users/$ADMIN_ID" \
+    -H "Content-Type: application/json" \
+    -H "apikey: $SERVICE_KEY" \
+    -H "Authorization: Bearer $SERVICE_KEY" \
+    -d '{"app_metadata":{"provider":"email","providers":["email"],"role":"admin"}}' > /dev/null
+  echo "✓ Admin app_metadata.role set"
+fi
+
+# Also set in profiles table (for DB-level queries)
 docker compose exec -T db psql -U postgres -d postgres -c "
-  UPDATE auth.users SET role = 'authenticated', aud = 'authenticated' WHERE email IN ('admin@ignitra.dev', 'user@ignitra.dev') AND (role = '' OR role IS NULL);
   UPDATE profiles SET role = 'admin', plan_id = (SELECT id FROM plans WHERE slug = 'pro' LIMIT 1) WHERE email = 'admin@ignitra.dev';
 " 2>/dev/null
 

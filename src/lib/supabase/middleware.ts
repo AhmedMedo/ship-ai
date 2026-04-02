@@ -3,14 +3,17 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 // Creates a Supabase client for use in Next.js middleware
 // Handles session refresh by reading/writing cookies on the request/response
+//
+// IMPORTANT: Uses NEXT_PUBLIC_SUPABASE_URL so cookie names match the browser client.
+// Overrides fetch to route requests to the internal Docker URL (SUPABASE_URL).
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  // Middleware runs server-side — use internal Docker URL if available
-  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const publicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  const internalUrl = process.env.SUPABASE_URL;
 
   const supabase = createServerClient(
-    supabaseUrl,
+    publicUrl,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
@@ -27,6 +30,18 @@ export async function updateSession(request: NextRequest) {
           });
         },
       },
+      // Route requests to internal Docker URL while keeping cookie names consistent
+      ...(internalUrl && internalUrl !== publicUrl
+        ? {
+            global: {
+              fetch: (input: RequestInfo | URL, init?: RequestInit) => {
+                const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+                const rewritten = url.replace(publicUrl, internalUrl);
+                return fetch(rewritten, init);
+              },
+            },
+          }
+        : {}),
     },
   );
 
@@ -43,16 +58,12 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Admin routes: redirect non-admins to /dashboard
+  // Role is stored in app_metadata (set via GoTrue Admin API, included in JWT)
   if (request.nextUrl.pathname.startsWith('/admin')) {
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single();
-    if (profile?.role !== 'admin') {
+    if (user.app_metadata?.role !== 'admin') {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
   }
