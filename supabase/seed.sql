@@ -43,92 +43,25 @@ END
 $$;
 
 -- ═══════════════════════════════════════════════════════════
--- Demo users for testing
--- Admin:  admin@ignitra.dev / admin123
--- User:   user@ignitra.dev  / user123
---
--- The profile trigger (handle_new_user) auto-creates profiles.
--- After insert, we upgrade the admin user's role.
--- Password hashes are bcrypt of the plaintext passwords above.
+-- Ensure the profile creation trigger exists.
+-- This trigger auto-creates a profiles row when a user signs up.
 -- ═══════════════════════════════════════════════════════════
 
-DO $$
-DECLARE
-  admin_uid uuid := 'a0000000-0000-0000-0000-000000000001';
-  user_uid  uuid := 'a0000000-0000-0000-0000-000000000002';
-  pro_plan_id uuid;
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
 BEGIN
-  -- Only seed if auth schema exists and users don't already exist
-  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'auth' AND table_name = 'users') THEN
-    IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'admin@ignitra.dev') THEN
+  INSERT INTO public.profiles (id, email, full_name, avatar_url)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    NEW.raw_user_meta_data->>'full_name',
+    NEW.raw_user_meta_data->>'avatar_url'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-      -- Insert admin user into auth.users
-      INSERT INTO auth.users (
-        id, instance_id, aud, role, email,
-        encrypted_password,
-        email_confirmed_at, confirmation_sent_at,
-        raw_app_meta_data, raw_user_meta_data,
-        created_at, updated_at
-      ) VALUES (
-        admin_uid,
-        '00000000-0000-0000-0000-000000000000',
-        'authenticated', 'authenticated', 'admin@ignitra.dev',
-        '$2a$10$4XtqwZ6HbrDv/qiDXNXVl.BdA9nEpcex2HqB1XrMRP3J2pj/YJFIC', -- admin123
-        now(), now(),
-        '{"provider":"email","providers":["email"]}',
-        '{"full_name":"Admin User"}',
-        now(), now()
-      );
-
-      -- Insert into auth.identities (required for email login)
-      INSERT INTO auth.identities (id, user_id, provider_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
-      VALUES (
-        admin_uid, admin_uid, 'admin@ignitra.dev',
-        jsonb_build_object('sub', admin_uid::text, 'email', 'admin@ignitra.dev', 'full_name', 'Admin User'),
-        'email', now(), now(), now()
-      );
-
-      -- Set admin role (profile was created by trigger)
-      UPDATE profiles SET role = 'admin' WHERE id = admin_uid;
-
-      -- Assign Pro plan to admin
-      SELECT id INTO pro_plan_id FROM plans WHERE slug = 'pro' LIMIT 1;
-      IF pro_plan_id IS NOT NULL THEN
-        UPDATE profiles SET plan_id = pro_plan_id WHERE id = admin_uid;
-      END IF;
-
-      RAISE NOTICE 'Admin user seeded: admin@ignitra.dev / admin123';
-    END IF;
-
-    IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'user@ignitra.dev') THEN
-
-      -- Insert regular user into auth.users
-      INSERT INTO auth.users (
-        id, instance_id, aud, role, email,
-        encrypted_password,
-        email_confirmed_at, confirmation_sent_at,
-        raw_app_meta_data, raw_user_meta_data,
-        created_at, updated_at
-      ) VALUES (
-        user_uid,
-        '00000000-0000-0000-0000-000000000000',
-        'authenticated', 'authenticated', 'user@ignitra.dev',
-        '$2a$10$.WN8gvWkrRFAOBjnIj9v5.OLdb/4CtXiGlj8tmdgSFkkQc6R9.Ztq', -- user123
-        now(), now(),
-        '{"provider":"email","providers":["email"]}',
-        '{"full_name":"Demo User"}',
-        now(), now()
-      );
-
-      INSERT INTO auth.identities (id, user_id, provider_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
-      VALUES (
-        user_uid, user_uid, 'user@ignitra.dev',
-        jsonb_build_object('sub', user_uid::text, 'email', 'user@ignitra.dev', 'full_name', 'Demo User'),
-        'email', now(), now(), now()
-      );
-
-      RAISE NOTICE 'Demo user seeded: user@ignitra.dev / user123';
-    END IF;
-  END IF;
-END
-$$;
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
