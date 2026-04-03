@@ -1,1 +1,0 @@
-// TODO: Current plan indicator

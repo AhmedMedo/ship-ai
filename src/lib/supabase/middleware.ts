@@ -51,8 +51,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Protected routes: redirect to /login if not authenticated
-  // TODO: Remove DEV_SKIP_AUTH bypass before production
-  const skipAuth = process.env.DEV_SKIP_AUTH === 'true';
+  const skipAuth = process.env.NODE_ENV !== 'production' && process.env.DEV_SKIP_AUTH === 'true';
   if (request.nextUrl.pathname.startsWith('/dashboard') && !user && !skipAuth) {
     return NextResponse.redirect(new URL('/login', request.url));
   }

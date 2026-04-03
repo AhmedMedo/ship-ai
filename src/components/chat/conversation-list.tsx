@@ -115,6 +115,7 @@ export function ConversationList() {
                   </div>
                 </Link>
                 <button
+                  type="button"
                   onClick={(e) => {
                     e.preventDefault();
                     handleDelete(conv.id);

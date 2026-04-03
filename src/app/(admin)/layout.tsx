@@ -43,6 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             ← Back to Dashboard
           </Link>
           <button
+            type="button"
             onClick={async () => {
               const supabase = createClient();
               await supabase.auth.signOut();

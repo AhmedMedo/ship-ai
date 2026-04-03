@@ -9,17 +9,16 @@ export async function POST() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return Response.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const [profile] = await db
-    .select({ stripeCustomerId: profiles.stripeCustomerId })
-    .from(profiles)
-    .where(eq(profiles.id, user.id))
-    .limit(1);
-
-  if (!profile?.stripeCustomerId) {
-    return Response.json({ error: 'No billing account found' }, { status: 400 });
-  }
-
   try {
+    const [profile] = await db
+      .select({ stripeCustomerId: profiles.stripeCustomerId })
+      .from(profiles)
+      .where(eq(profiles.id, user.id))
+      .limit(1);
+
+    if (!profile?.stripeCustomerId) {
+      return Response.json({ error: 'No billing account found' }, { status: 400 });
+    }
     const session = await createPortalSession(profile.stripeCustomerId);
     return Response.json({ url: session.url });
   } catch (error) {

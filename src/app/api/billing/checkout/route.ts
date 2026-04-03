@@ -21,14 +21,12 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Invalid request' }, { status: 400 });
   }
 
-  // Get existing stripe_customer_id if any
-  const [profile] = await db
-    .select({ stripeCustomerId: profiles.stripeCustomerId })
-    .from(profiles)
-    .where(eq(profiles.id, user.id))
-    .limit(1);
-
   try {
+    const [profile] = await db
+      .select({ stripeCustomerId: profiles.stripeCustomerId })
+      .from(profiles)
+      .where(eq(profiles.id, user.id))
+      .limit(1);
     const session = await createCheckoutSession({
       userId: user.id,
       email: user.email!,

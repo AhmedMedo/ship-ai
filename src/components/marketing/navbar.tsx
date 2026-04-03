@@ -46,6 +46,7 @@ export function Navbar() {
           {navLinks.map((link) =>
             link.href.startsWith('#') ? (
               <button
+                type="button"
                 key={link.label}
                 onClick={() => scrollTo(link.href)}
                 className="text-[14px] font-medium transition-colors"
@@ -112,6 +113,7 @@ export function Navbar() {
 
         {/* Mobile hamburger */}
         <button
+          type="button"
           className="flex items-center justify-center md:hidden"
           onClick={() => setOpen(!open)}
           style={{ color: '#94A3B8' }}
@@ -132,6 +134,7 @@ export function Navbar() {
           {navLinks.map((link) =>
             link.href.startsWith('#') ? (
               <button
+                type="button"
                 key={link.label}
                 onClick={() => { scrollTo(link.href); setOpen(false); }}
                 className="block w-full py-2.5 text-left text-sm font-medium"

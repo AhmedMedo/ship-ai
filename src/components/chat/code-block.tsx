@@ -26,6 +26,7 @@ export function CodeBlock({ language, children }: CodeBlockProps) {
           {language || 'code'}
         </span>
         <button
+          type="button"
           onClick={handleCopy}
           className="rounded px-2 py-0.5 text-[11px] transition-colors hover:bg-[#313244]"
           style={{ color: copied ? '#a6e3a1' : '#6c7086' }}

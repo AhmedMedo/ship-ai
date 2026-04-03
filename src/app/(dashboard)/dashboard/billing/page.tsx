@@ -1,15 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreditCard, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function BillingPage() {
   const [loading, setLoading] = useState(false);
+  const [currentPlan, setCurrentPlan] = useState('...');
+  const [hasSubscription, setHasSubscription] = useState(false);
+  const [planLoading, setPlanLoading] = useState(true);
 
-  // TODO: Fetch real plan data from profile once auth is wired
-  const currentPlan = 'Pro';
-  const hasSubscription = true;
+  useEffect(() => {
+    fetch('/api/usage?period=today')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.plan) {
+          setCurrentPlan(data.plan.name ?? 'Free');
+          setHasSubscription(data.plan.slug !== 'free');
+        }
+      })
+      .catch(() => setCurrentPlan('Free'))
+      .finally(() => setPlanLoading(false));
+  }, []);
 
   async function handleCheckout() {
     setLoading(true);
@@ -22,7 +34,7 @@ export default function BillingPage() {
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch {
-      // Handle error
+      // Silently fail — user stays on page
     } finally {
       setLoading(false);
     }
@@ -35,7 +47,7 @@ export default function BillingPage() {
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch {
-      // Handle error
+      // Silently fail — user stays on page
     } finally {
       setLoading(false);
     }
@@ -46,46 +58,43 @@ export default function BillingPage() {
       <h2 className="mb-4 text-lg font-bold">Billing</h2>
 
       <div className="rounded-xl border bg-card p-6">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="flex items-center gap-3">
-              <CreditCard className="h-5 w-5 text-muted-foreground" />
-              <h3 className="text-base font-bold">Current plan</h3>
+        {planLoading ? (
+          <div className="h-24 animate-pulse rounded-lg bg-muted" />
+        ) : (
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="flex items-center gap-3">
+                <CreditCard className="h-5 w-5 text-muted-foreground" />
+                <h3 className="text-base font-bold">Current plan</h3>
+              </div>
+              <div className="mt-3">
+                <span className="inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary">
+                  {currentPlan}
+                </span>
+              </div>
+              <p className="mt-2 text-sm text-muted-foreground">
+                {hasSubscription ? 'Your subscription renews automatically.' : 'Upgrade to unlock more features.'}
+              </p>
             </div>
-            <div className="mt-3">
-              <span
-                className="inline-flex rounded-md bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary"
-              >
-                {currentPlan}
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              {hasSubscription ? 'Your subscription renews automatically.' : 'Upgrade to unlock more features.'}
-            </p>
-          </div>
 
-          <div>
-            {hasSubscription ? (
-              <Button
-                onClick={handlePortal}
-                disabled={loading}
-                variant="outline"
-                className="gap-2"
-              >
-                <ExternalLink className="h-4 w-4" />
-                Manage Subscription
-              </Button>
-            ) : (
-              <Button
-                onClick={handleCheckout}
-                disabled={loading}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                Upgrade to Pro
-              </Button>
-            )}
+            <div>
+              {hasSubscription ? (
+                <Button onClick={handlePortal} disabled={loading} variant="outline" className="gap-2">
+                  <ExternalLink className="h-4 w-4" />
+                  Manage Subscription
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleCheckout}
+                  disabled={loading}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  Upgrade to Pro
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

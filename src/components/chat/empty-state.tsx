@@ -24,9 +24,10 @@ export function EmptyState({ onSelectPrompt }: EmptyStateProps) {
       <div className="mt-6 flex max-w-[480px] flex-wrap justify-center gap-2">
         {suggestedPrompts.map((prompt) => (
           <button
+            type="button"
             key={prompt}
             onClick={() => onSelectPrompt(prompt)}
-            className="rounded-full border px-4 py-2 text-sm transition-colors hover:border-[#0F4C75]/30 hover:bg-[var(--muted)]"
+            className="rounded-full border px-4 py-2 text-sm transition-colors hover:border-primary/30 hover:bg-muted"
             style={{ borderColor: 'var(--border)' }}
           >
             {prompt}

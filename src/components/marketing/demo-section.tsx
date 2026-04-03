@@ -1,5 +1,3 @@
-'use client';
-
 // Product screenshot mockup showing the chat UI — gives buyers a preview
 
 export function DemoSection() {

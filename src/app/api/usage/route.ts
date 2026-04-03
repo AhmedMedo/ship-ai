@@ -16,6 +16,7 @@ export async function GET(req: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  try {
   const period = req.nextUrl.searchParams.get('period') ?? 'today';
 
   // Date filter based on period
@@ -89,4 +90,8 @@ export async function GET(req: NextRequest) {
     },
     byModel: modelBreakdown,
   });
+  } catch (error) {
+    console.error('[usage] GET error:', error);
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

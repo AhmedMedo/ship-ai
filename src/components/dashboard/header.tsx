@@ -65,7 +65,7 @@ export function Header({ userEmail, userRole, planName }: HeaderProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-white outline-none">
+            <button type="button" className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-bold text-white outline-none">
               {userEmail ? userEmail[0].toUpperCase() : 'A'}
             </button>
           </DropdownMenuTrigger>

@@ -196,7 +196,7 @@ export default function DashboardPage() {
                     <div className="flex items-center gap-2 font-semibold">
                       <div
                         className="h-2 w-2 rounded-full"
-                        style={{ background: MODEL_COLORS[model] ?? '#94A3B8' }}
+                        style={{ background: MODEL_COLORS[model] ?? 'var(--color-muted-foreground)' }}
                       />
                       {model}
                     </div>

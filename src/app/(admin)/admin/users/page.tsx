@@ -143,6 +143,7 @@ export default function AdminUsersPage() {
           </span>
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
               className="rounded-lg border bg-card px-3 py-1.5 text-xs font-medium disabled:opacity-40"
@@ -153,6 +154,7 @@ export default function AdminUsersPage() {
               {page + 1} / {totalPages}
             </span>
             <button
+              type="button"
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={page >= totalPages - 1}
               className="rounded-lg border bg-card px-3 py-1.5 text-xs font-medium disabled:opacity-40"

@@ -89,6 +89,7 @@ export function ChatContainer({ conversationId, title, model }: ChatContainerPro
         {isLoading && (
           <div className="flex justify-center">
             <button
+              type="button"
               onClick={stop}
               className="rounded-lg border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted"
             >

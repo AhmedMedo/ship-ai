@@ -1,8 +1,7 @@
 import { streamText } from 'ai';
 import { z } from 'zod';
 import { getModel } from '@/lib/ai/provider';
-import { MODELS } from '@/lib/ai/models';
-import { calculateCost } from '@/lib/ai/models';
+import { MODELS, calculateCost } from '@/lib/ai/models';
 import { checkUsageLimit, logUsage } from '@/lib/ai/usage';
 import { reportUsageToStripe } from '@/lib/billing/usage-reporting';
 import { DEFAULT_SYSTEM_PROMPT } from '@/lib/ai/prompts';
