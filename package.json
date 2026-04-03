@@ -26,6 +26,7 @@
     "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "@vercel/analytics": "^2.0.1",
     "ai": "latest",
     "class-variance-authority": "latest",
     "clsx": "latest",
