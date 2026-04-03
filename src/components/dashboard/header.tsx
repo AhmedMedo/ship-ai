@@ -33,7 +33,7 @@ const pageTitles: Record<string, string> = {
 
 export function Header({ userEmail, userRole, planName }: HeaderProps) {
   const pathname = usePathname();
-  const title = pageTitles[pathname] || 'Dashboard';
+  const title = (pathname && pageTitles[pathname]) || 'Dashboard';
 
   async function handleLogout() {
     const supabase = createClient();

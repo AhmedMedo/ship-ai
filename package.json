@@ -22,7 +22,6 @@
     "@ai-sdk/google": "latest",
     "@ai-sdk/openai": "latest",
     "@ai-sdk/react": "latest",
-    "@react-email/components": "latest",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@supabase/ssr": "latest",
@@ -52,7 +51,6 @@
     "zod": "latest"
   },
   "devDependencies": {
-    "@sentry/nextjs": "latest",
     "@tailwindcss/postcss": "latest",
     "@tailwindcss/typography": "latest",
     "@testing-library/react": "latest",

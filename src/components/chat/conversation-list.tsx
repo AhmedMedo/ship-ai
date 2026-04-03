@@ -42,7 +42,7 @@ export function ConversationList() {
     await fetch(`/api/conversations/${id}`, { method: 'DELETE' });
     setConversations((prev) => prev.filter((c) => c.id !== id));
 
-    if (pathname.includes(id)) {
+    if (pathname?.includes(id)) {
       router.push('/dashboard/chat');
     }
   }

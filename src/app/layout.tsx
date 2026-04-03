@@ -8,6 +8,10 @@ const inter = Inter({
   variable: '--font-sans',
 });
 
+// Force dynamic rendering — ThemeProvider (client component) causes
+// useContext errors during static prerendering
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: {
     default: 'Ignitra — The AI-Native SaaS Boilerplate',

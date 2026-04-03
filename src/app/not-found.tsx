@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import { Logo } from '@/components/shared/logo';
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-muted/50 p-6">
-      <Logo variant="icon" size="lg" className="mb-6" />
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
       <h1 className="text-6xl font-extrabold tracking-tight">404</h1>
       <p className="mt-2 text-lg text-muted-foreground">This page doesn&apos;t exist.</p>
       <Link

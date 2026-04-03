@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/shared/logo';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
