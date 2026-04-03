@@ -49,3 +49,5 @@ docker-compose.override.yml
 
 # Project planning docs (not part of the boilerplate)
 shipai-claude-code-docs/
+
+cloud-setup.md
