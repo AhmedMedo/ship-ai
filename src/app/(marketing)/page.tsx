@@ -18,12 +18,14 @@ export const metadata: Metadata = {
       'The Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing.',
     type: 'website',
     url: '/',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Ignitra — The AI-Native SaaS Boilerplate' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ignitra — Launch your AI SaaS in days, not months',
     description:
       'The Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing.',
+    images: ['/opengraph-image'],
   },
 };
 
