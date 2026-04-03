@@ -3,8 +3,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Plus, Search, Trash2 } from 'lucide-react';
+import { AlertTriangle, Plus, Search, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface Conversation {
   id: string;
@@ -19,10 +28,12 @@ export function ConversationList() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [pendingDelete, setPendingDelete] = useState<Conversation | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     fetchConversations();
-  }, []);
+  }, [pathname]);
 
   async function fetchConversations() {
     try {
@@ -36,15 +47,27 @@ export function ConversationList() {
     }
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm('Delete this conversation?')) return;
-
-    await fetch(`/api/conversations/${id}`, { method: 'DELETE' });
-    setConversations((prev) => prev.filter((c) => c.id !== id));
-
-    if (pathname?.includes(id)) {
-      router.push('/dashboard/chat');
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    const id = pendingDelete.id;
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/conversations/${id}`, { method: 'DELETE' });
+      if (!res.ok) return;
+      setConversations((prev) => prev.filter((c) => c.id !== id));
+      setPendingDelete(null);
+      if (pathname?.includes(id)) {
+        router.push('/dashboard/chat');
+      }
+    } finally {
+      setDeleting(false);
     }
+  }
+
+  function openDeleteDialog(conv: Conversation, e: React.MouseEvent) {
+    e.preventDefault();
+    e.stopPropagation();
+    setPendingDelete(conv);
   }
 
   function timeAgo(dateStr: string): string {
@@ -64,6 +87,48 @@ export function ConversationList() {
   );
 
   return (
+    <>
+      <Dialog
+        open={pendingDelete !== null}
+        onOpenChange={(open) => {
+          if (!open && !deleting) setPendingDelete(null);
+        }}
+      >
+        <DialogContent
+          showCloseButton
+          className="border-border bg-card sm:max-w-md"
+          onEscapeKeyDown={(e) => deleting && e.preventDefault()}
+          onPointerDownOutside={(e) => deleting && e.preventDefault()}
+        >
+          <DialogHeader className="gap-3 sm:text-left">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive sm:mx-0">
+              <AlertTriangle className="h-6 w-6" aria-hidden />
+            </div>
+            <DialogTitle>Delete conversation?</DialogTitle>
+            <DialogDescription className="text-pretty text-left">
+              This removes{' '}
+              <span className="font-medium text-foreground">
+                {pendingDelete?.title || 'this chat'}
+              </span>{' '}
+              and all of its messages. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2 sm:gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              disabled={deleting}
+              onClick={() => setPendingDelete(null)}
+            >
+              Cancel
+            </Button>
+            <Button type="button" variant="destructive" disabled={deleting} onClick={() => void confirmDelete()}>
+              {deleting ? 'Deleting…' : 'Delete'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
     <div className="flex h-full w-[280px] flex-shrink-0 flex-col border-r bg-card">
       <div className="p-4">
         <Link
@@ -116,11 +181,9 @@ export function ConversationList() {
                 </Link>
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleDelete(conv.id);
-                  }}
-                  className="ml-2 mt-1 hidden flex-shrink-0 rounded p-1 text-destructive transition-colors hover:bg-red-100 group-hover:block"
+                  aria-label={`Delete conversation: ${conv.title}`}
+                  onClick={(e) => openDeleteDialog(conv, e)}
+                  className="ml-2 mt-1 hidden flex-shrink-0 rounded p-1 text-destructive transition-colors hover:bg-destructive/10 dark:hover:bg-destructive/20 group-hover:block"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>
@@ -130,5 +193,6 @@ export function ConversationList() {
         )}
       </div>
     </div>
+    </>
   );
 }

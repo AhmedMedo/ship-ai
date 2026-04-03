@@ -18,7 +18,7 @@ export function ChatInput({
   onInputChange,
   onSubmit,
   isLoading,
-  model = 'gpt-4o-mini',
+  model,
   tokensUsed = 0,
   tokenLimit = 100000,
 }: ChatInputProps) {

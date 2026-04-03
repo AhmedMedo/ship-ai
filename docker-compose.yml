@@ -14,7 +14,6 @@ services:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
       - WATCHPACK_POLLING=true
-      - NEXT_PRIVATE_LOCAL_WEBPACK=true
     env_file:
       - .env.local
     depends_on:

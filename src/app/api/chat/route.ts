@@ -8,19 +8,55 @@ import { DEFAULT_SYSTEM_PROMPT } from '@/lib/ai/prompts';
 import { createClient } from '@/lib/supabase/server';
 import { db } from '@/db';
 import { conversations, messages } from '@/db/schema';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
+
+/** AI SDK sends the active chat id as `id`; we also accept `conversationId` in the body. */
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function resolveConversationId(
+  conversationId: string | null | undefined,
+  requestId: string | undefined,
+): string | null {
+  if (conversationId) return conversationId;
+  if (requestId && UUID_RE.test(requestId)) return requestId;
+  return null;
+}
 
 // Zod schema for request validation
+// AI SDK v4 sends messages as { role, parts: [{ type, text }] } with optional content
 const chatRequestSchema = z.object({
+  id: z.string().optional(),
   messages: z.array(
     z.object({
+      id: z.string().optional(),
       role: z.enum(['user', 'assistant', 'system']),
-      content: z.string(),
+      content: z.string().optional(),
+      parts: z
+        .array(
+          z.object({
+            type: z.string(),
+            text: z.string().optional(),
+          }),
+        )
+        .optional(),
     }),
   ),
   conversationId: z.string().uuid().nullable().optional(),
   model: z.string().optional(),
+  trigger: z.string().optional(),
 });
+
+/** Extract plain text content from an AI SDK message */
+function getMessageContent(msg: { content?: string; parts?: { type: string; text?: string }[] }): string {
+  if (msg.content) return msg.content;
+  if (msg.parts) {
+    return msg.parts
+      .filter((p) => p.type === 'text' && p.text)
+      .map((p) => p.text!)
+      .join('');
+  }
+  return '';
+}
 
 export async function POST(req: Request) {
   try {
@@ -45,7 +81,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const { messages: userMessages, conversationId, model: requestedModel } = parsed.data;
+    const { messages: userMessages, conversationId, model: requestedModel, id: requestChatId } =
+      parsed.data;
     const modelId = requestedModel || process.env.AI_MODEL || MODELS.GPT_4O_MINI;
 
     // 3. Check usage limits
@@ -61,11 +98,22 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4. Get or create conversation
-    let convId = conversationId ?? null;
-    if (!convId) {
+    // 4. Get or create conversation (client sends chat UUID as `id`, not `conversationId`)
+    let convId = resolveConversationId(conversationId, requestChatId);
+
+    if (convId) {
+      const [existing] = await db
+        .select({ id: conversations.id })
+        .from(conversations)
+        .where(and(eq(conversations.id, convId), eq(conversations.userId, user.id)))
+        .limit(1);
+
+      if (!existing) {
+        return Response.json({ error: 'Conversation not found' }, { status: 404 });
+      }
+    } else {
       const title =
-        userMessages[userMessages.length - 1]?.content?.slice(0, 100) || 'New conversation';
+        getMessageContent(userMessages[userMessages.length - 1])?.slice(0, 100) || 'New conversation';
 
       const [newConv] = await db
         .insert(conversations)
@@ -79,10 +127,14 @@ export async function POST(req: Request) {
       convId = newConv.id;
     }
 
-    // 5. Build messages array with system prompt
+    // 5. Build messages array with system prompt (normalize parts → content)
+    const normalizedMessages = userMessages.map((m) => ({
+      role: m.role,
+      content: getMessageContent(m),
+    }));
     const fullMessages = [
       { role: 'system' as const, content: DEFAULT_SYSTEM_PROMPT },
-      ...userMessages,
+      ...normalizedMessages,
     ];
 
     // 6. Stream response
@@ -90,9 +142,10 @@ export async function POST(req: Request) {
     const result = streamText({
       model,
       messages: fullMessages,
-      onFinish: async ({ usage }) => {
-        const inputTokens = usage?.inputTokens || 0;
-        const outputTokens = usage?.outputTokens || 0;
+      onFinish: async (event) => {
+        const usage = event.usage;
+        const inputTokens = usage?.inputTokens ?? 0;
+        const outputTokens = usage?.outputTokens ?? 0;
         const costUsd = calculateCost(modelId, inputTokens, outputTokens);
 
         // 7. Log usage
@@ -128,8 +181,8 @@ export async function POST(req: Request) {
         }
 
         // 9. Save user message + assistant response to DB
-        const userMsg = userMessages[userMessages.length - 1];
-        const assistantText = await result.text;
+        const userMsg = normalizedMessages[normalizedMessages.length - 1];
+        const assistantText = event.text;
 
         await db.insert(messages).values([
           {
@@ -163,8 +216,12 @@ export async function POST(req: Request) {
       },
     });
 
-    // Return streaming response
-    return result.toTextStreamResponse();
+    // Return streaming response (header lets the client sync URL after first message on /dashboard/chat)
+    return result.toUIMessageStreamResponse({
+      headers: {
+        'X-Conversation-Id': convId!,
+      },
+    });
   } catch (error) {
     console.error('[chat] AI provider error:', error);
     return Response.json(
