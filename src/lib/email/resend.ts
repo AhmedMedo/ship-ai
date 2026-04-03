@@ -1,8 +1,14 @@
 import { Resend } from 'resend';
 
-// Resend client for transactional email.
-// Set RESEND_API_KEY in your env. In development, emails are caught by Inbucket.
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-initialized Resend client — avoids crash during build when env var is missing
+let _resend: Resend | null = null;
+
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY ?? '');
+  }
+  return _resend;
+}
 
 const FROM_EMAIL = process.env.EMAIL_FROM ?? 'Ignitra <noreply@ignitra.dev>';
 
@@ -15,8 +21,13 @@ export async function sendEmail({
   subject: string;
   html: string;
 }) {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] RESEND_API_KEY not set, skipping email send');
+    return { success: false, error: 'RESEND_API_KEY not configured' };
+  }
+
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: FROM_EMAIL,
       to,
       subject,
