@@ -6,6 +6,17 @@ import { Calendar, User } from 'lucide-react';
 export const metadata: Metadata = {
   title: 'Blog — Ignitra',
   description: 'Tutorials, updates, and insights on building AI SaaS products with Ignitra.',
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Blog — Ignitra',
+    description: 'Tutorials, updates, and insights on building AI SaaS products with Ignitra.',
+    url: '/blog',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Blog — Ignitra',
+    description: 'Tutorials, updates, and insights on building AI SaaS products with Ignitra.',
+  },
 };
 
 export default function BlogPage() {

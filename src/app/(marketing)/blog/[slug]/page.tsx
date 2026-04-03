@@ -21,12 +21,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${post.title} — Ignitra Blog`,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: 'article',
+      url: `/blog/${slug}`,
       publishedTime: post.date,
       authors: [post.author],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }
@@ -36,8 +43,23 @@ export default async function BlogPostPage({ params }: Props) {
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://ignitra.dev';
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    author: { '@type': 'Person', name: post.author },
+    url: `${baseUrl}/blog/${slug}`,
+  };
+
   return (
     <article className="mx-auto max-w-[720px] px-6 pb-20 pt-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Back link */}
       <Link
         href="/blog"

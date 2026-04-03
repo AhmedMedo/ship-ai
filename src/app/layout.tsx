@@ -17,6 +17,7 @@ const inter = Inter({
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://ignitra.dev'),
   title: {
     default: 'Ignitra — The AI-Native SaaS Boilerplate',
     template: '%s | Ignitra',
@@ -26,6 +27,14 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.svg',
     apple: '/favicon.svg',
+  },
+  openGraph: {
+    siteName: 'Ignitra',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
   },
 };
 
