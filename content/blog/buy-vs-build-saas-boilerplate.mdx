@@ -1,0 +1,51 @@
+---
+title: "Building a SaaS in 2026: Buy vs Build the Boilerplate"
+date: "2026-03-31"
+excerpt: "Should you build your SaaS foundation from scratch or start with a boilerplate? A honest analysis of the trade-offs."
+author: "Ahmed Alaa"
+---
+
+# Building a SaaS in 2026: Buy vs Build the Boilerplate
+
+Every SaaS founder faces this decision: spend 2–3 months building authentication, payments, and infrastructure from scratch, or pay $150–$500 for a boilerplate and start building your **actual** product on day one.
+
+Having built both from scratch and with boilerplates, here's the honest breakdown.
+
+## The Case for Building from Scratch
+
+You understand every line of code. There's no unused code sitting in your repo. The architecture is exactly what you need — no more, no less. You learn deeply by building each system yourself.
+
+That matters most when you're building something **architecturally unusual** — a product where the standard auth, payments, and chat patterns genuinely don't apply.
+
+## The Case for Buying a Boilerplate
+
+**Time** is the most compelling argument. Setting up Supabase auth with OAuth providers, email verification, and password reset takes a full day if you've done it before — a week if you haven't. Stripe integration with subscriptions, webhooks, portal, and metered billing takes another week. A streaming AI chat interface with markdown, code blocks, and conversation persistence takes **2–3 weeks**.
+
+That's **4–6 weeks** of work before you write a single line of your differentiated product. For a solo developer or small team, that's 4–6 weeks of runway burned on problems that have been solved thousands of times.
+
+## The Hidden Costs of DIY
+
+The initial build is only part of the cost. There's also debugging obscure OAuth callback issues, handling Stripe webhook edge cases you didn't know existed, fixing streaming disconnects on slow connections, and writing database migrations that don't break production.
+
+These are solved problems — but only if someone has already solved them in **your** stack.
+
+## When to Buy
+
+Buy a boilerplate when:
+
+- Your product idea is validated (you've talked to real users)
+- Your stack matches the boilerplate's stack
+- Time-to-market matters more than architectural perfection
+- The boilerplate covers at least ~70% of your foundation needs
+
+## When to Build
+
+Build from scratch when your architecture is truly unique, you're on a stack no boilerplate covers, you need to understand every line for compliance or security reasons, or the learning itself is your primary goal.
+
+For most **AI SaaS** products in 2026, the foundation is standardized enough that a boilerplate is the right call. Differentiation lives in your **data**, your **UX**, and your **system prompt** — not in how you implemented Stripe webhooks.
+
+If you're still wiring AI, our guides on [streaming chat](/blog/streaming-ai-chat-nextjs) and [token tracking](/blog/token-tracking-ai-saas) show how much surface area "just chat" really has.
+
+---
+
+*Ignitra is built for founders who want a serious AI SaaS foundation without spending a quarter on plumbing. [Read the docs](/docs/getting-started) or browse more on the [blog](/blog).*

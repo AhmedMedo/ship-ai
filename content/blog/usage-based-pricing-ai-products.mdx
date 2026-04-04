@@ -1,0 +1,58 @@
+---
+title: "Usage-Based Pricing for AI Products: A Practical Guide"
+date: "2026-04-05"
+excerpt: "How to implement usage-based pricing with Stripe metered billing for AI SaaS products — and why flat-rate subscriptions leave money on the table."
+author: "Ahmed Alaa"
+---
+
+# Usage-Based Pricing for AI Products: A Practical Guide
+
+Flat-rate subscriptions are the default pricing model for SaaS — but they're often a **poor fit** for AI products. Here's why usage-based pricing works better, and how to implement it with Stripe.
+
+## The Problem with Flat-Rate for AI
+
+AI products have a variable cost structure: **every API call costs real money**. A user who sends 5 messages a day might cost you $0.10/month. A user who sends 500 messages a day might cost you $30/month. If both pay the same $19/month subscription, the heavy user can be **unprofitable**.
+
+You end up subsidizing power users with light users — which creates the wrong incentive: you don't want people to succeed *more* with your product.
+
+## Usage-Based Pricing Models
+
+Three common approaches:
+
+1. **Pure usage** — charge per token or per message, no subscription. Simple, but unpredictable for buyers.
+2. **Tiered subscriptions with overage** — include an allowance, bill beyond it. Great balance of predictability and fairness.
+3. **Hybrid** — base subscription for product access, usage fees for AI. Flexible for complex products.
+
+Most successful AI products land on **tiered + overage** or hybrid: customers understand a base price, and heavy usage scales naturally.
+
+## Implementing with Stripe Metered Billing
+
+Stripe's metered billing handles much of the complexity:
+
+- Create a metered price (per unit — e.g., per 1K tokens)
+- Report usage during or at the end of the billing period
+- Let Stripe calculate charges on the invoice
+
+The integration usually has three layers:
+
+1. **Record usage in your database** — for dashboards, limits, and support
+2. **Report usage to Stripe** — for billing
+3. **Handle subscription lifecycle via webhooks** — upgrades, cancellations, failed payments
+
+If you haven't built metering yet, start with [why token tracking matters from day one](/blog/token-tracking-ai-saas) — billing without accurate counts is guesswork.
+
+## Pricing Your Tokens
+
+To set a profitable per-token price:
+
+1. Compute your **blended cost** per 1K tokens for the models you use
+2. Add margin (often **3–5×** raw API cost, depending on positioning)
+3. Round to a clean number customers can reason about
+
+Example: if your blended cost is ~$0.001 per 1K tokens, you might charge $0.003–$0.005 per 1K on overage — still cheap per message, but sustainable at scale.
+
+**Ignitra** includes the pipeline from chat → token counts → usage records, with Stripe reporting hooks you can align to your plans. See also [Payments & Billing](/docs/payments) in the docs.
+
+---
+
+*Ignitra connects token tracking to Stripe-ready patterns so you can ship usage-based pricing without building metering twice. [Read the payments docs](/docs/payments).*

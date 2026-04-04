@@ -1,0 +1,52 @@
+---
+title: "Supabase Auth + Row Level Security: The Complete Guide"
+date: "2026-04-02"
+excerpt: "How to set up Supabase Auth with Row Level Security in a Next.js app — and why RLS is non-negotiable for SaaS products."
+author: "Ahmed Alaa"
+---
+
+# Supabase Auth + Row Level Security: The Complete Guide
+
+If you're building a multi-user SaaS product, **Row Level Security (RLS)** is one of the most important security features you can implement. Here's why — and how to do it with Supabase and Next.js.
+
+## What is Row Level Security?
+
+RLS is a PostgreSQL feature that enforces access control **at the database level**. Instead of relying on your application code alone to filter data by user, the database itself refuses to return rows the user doesn't own.
+
+That means even if there's a bug in your API route — a missing `WHERE` clause, a broken authorization check, a subtle injection issue — the database still prevents cross-tenant data leakage. It's **defense in depth**, and for SaaS it's not optional.
+
+## Why Application-Level Auth Isn't Enough
+
+Consider an API route that returns a user's conversations. Application-level filtering works **until it doesn't**: a refactor, a rushed feature, or a malicious request can expose data you never intended to return.
+
+With RLS, PostgreSQL adds the tenant filter automatically. Even if a query is overly broad, each session only sees rows that policies allow.
+
+## Setting Up RLS with Supabase
+
+Supabase makes RLS approachable:
+
+1. Enable RLS on every table that holds user data.
+2. Write policies that tie rows to `auth.uid()` (or your tenant model).
+3. Test with real JWTs — not just service role keys.
+
+The typical pattern for a SaaS app: users can `SELECT`, `INSERT`, `UPDATE`, and `DELETE` **their own** rows, usually by matching `auth.uid()` to a `user_id` column.
+
+For shared resources (teams, workspaces), policies check membership through join tables. The principle stays the same: **the database decides** what crosses the wire.
+
+## RLS with Drizzle ORM
+
+When using **Drizzle ORM** (which Ignitra uses), your queries look like normal SQL from the app's perspective. The ORM generates standard queries; PostgreSQL applies RLS policies transparently. You get security without rewriting your mental model for every query.
+
+## Common Mistakes
+
+1. **Creating a table and forgetting to enable RLS** — In Supabase, tighten this immediately; don't ship with open tables.
+2. **Overly permissive policies** — Start strict; loosen deliberately.
+3. **Testing only with the service role** — Service role bypasses RLS; always verify as an authenticated user.
+
+Ignitra ships with RLS-oriented patterns for conversations, messages, usage, and user-scoped data — so you're not inventing policy structure from scratch.
+
+For auth setup specifics, see our [Authentication guide](/docs/authentication). If you're comparing foundations, [buy vs build](/blog/buy-vs-build-saas-boilerplate) is worth a read too.
+
+---
+
+*Security isn't a sprint after launch — it's the foundation. Ignitra pairs Supabase Auth with SaaS-friendly patterns so you can ship confidently. [Documentation](/docs/authentication).*

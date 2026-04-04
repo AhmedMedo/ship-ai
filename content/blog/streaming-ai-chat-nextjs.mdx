@@ -1,0 +1,53 @@
+---
+title: "How to Add Streaming AI Chat to Next.js (The Right Way)"
+date: "2026-03-25"
+excerpt: "A practical guide to implementing streaming AI responses in Next.js using the Vercel AI SDK — with code examples."
+author: "Ahmed Alaa"
+---
+
+# How to Add Streaming AI Chat to Next.js (The Right Way)
+
+Streaming AI responses — where text appears word by word instead of all at once — is the standard UX for AI products in 2026. Users expect it. Here's how to implement it properly in Next.js.
+
+## Why Streaming Matters
+
+A typical GPT-4o response takes 3–8 seconds to generate fully. Without streaming, users stare at a loading spinner for that entire duration. With streaming, they see the first words within ~200ms. That dramatically improves **perceived** performance and keeps users engaged.
+
+The difference isn't cosmetic: abandoned sessions and support tickets both drop when the interface feels responsive.
+
+## The Vercel AI SDK Approach
+
+The Vercel AI SDK (`ai` package) provides a clean abstraction for streaming in Next.js. Install it with `pnpm add ai` plus your provider packages (`@ai-sdk/openai`, `@ai-sdk/anthropic`, `@ai-sdk/google`). You get:
+
+- A server-side streaming helper (`streamText`)
+- A React hook for the client (`useChat` from `@ai-sdk/react`)
+- Built-in support for OpenAI, Anthropic, and Google
+
+## Server Side: The API Route
+
+Your API route (for example `/api/chat`) uses `streamText()` from the AI SDK. It accepts your model configuration and messages array, then returns a streaming response. For UI Message streams, you typically use `toUIMessageStreamResponse()` so the client hook can consume the stream.
+
+The provider abstraction means switching from OpenAI to Claude is often a matter of **environment variables** — not rewriting your entire route. That flexibility matters when pricing or reliability shifts overnight.
+
+## Client Side: The useChat Hook
+
+On the client, `useChat()` from `@ai-sdk/react` handles message state, sending new messages, receiving streamed tokens, and updating the UI. You wire it to your transport (default `POST /api/chat`) and render messages from the hook.
+
+## The Hard Parts
+
+The streaming itself is the easy part. The hard parts are:
+
+- **Conversation persistence** — saving messages to a database without race conditions
+- **Markdown in streamed content** — you need a renderer that handles partial tokens gracefully
+- **Code block syntax highlighting** — especially while the fence is still incomplete
+- **Errors mid-stream** — network drops, rate limits, and user-visible recovery
+
+Building all of this from scratch takes a solid **2–3 weeks** for an experienced developer. The streaming, the UI, the persistence, the error handling, the provider abstraction — each piece is individually simple, but they all need to work together seamlessly.
+
+That's the core of what **Ignitra** provides: a production-ready streaming chat UI with conversation history, markdown rendering, code blocks, multi-provider support, and error handling — wired up so you can focus on your system prompt and go-to-market.
+
+If you're still choosing a model lineup, see [OpenAI vs Claude vs Gemini](/blog/openai-vs-claude-vs-gemini). And if you haven't thought about metering yet, read [why token tracking matters from day one](/blog/token-tracking-ai-saas).
+
+---
+
+*Want streaming chat without rebuilding the stack? Ignitra is a Next.js 15 boilerplate with the Vercel AI SDK already integrated. [Get started in the docs](/docs/getting-started).*

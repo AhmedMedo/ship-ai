@@ -1,0 +1,56 @@
+---
+title: "Ship Your AI Product This Weekend: A Step-by-Step Plan"
+date: "2026-04-08"
+excerpt: "A realistic weekend plan for going from idea to a live AI SaaS product with paying users — including which shortcuts to take and which to avoid."
+author: "Ahmed Alaa"
+---
+
+# Ship Your AI Product This Weekend: A Step-by-Step Plan
+
+You have a weekend and an AI product idea. Here's a **realistic** path from zero to something live by Sunday night — including which shortcuts are worth taking, and which ones will burn you later.
+
+## Saturday Morning: Foundation (about 3 hours)
+
+Start with a **boilerplate or framework** you trust. Clone it, install dependencies, get it running locally.
+
+If you're building auth + payments + chat from scratch, you're already behind — foundation work alone is often a **week** before you touch differentiation. With a solid AI SaaS boilerplate, you can be running in minutes and spend your time on positioning.
+
+Configure the basics: Supabase (free tier is fine to start), Stripe (test mode), and at least one AI provider key. Set your **system prompt** early — for many products, the prompt *is* the product.
+
+## Saturday Afternoon: Customization (about 4 hours)
+
+Replace branding: logo, colors, name, landing copy. Write your hero section like you're explaining the product to a smart friend: **what it does**, **who it's for**, and **why now**.
+
+Set up simple pricing in Stripe: a free tier with tight limits + one paid tier ($19–$29/mo is a common starting point). You can add complexity later; on day one, clarity beats perfection.
+
+## Saturday Evening: Polish (about 2 hours)
+
+Walk every critical path: sign up, log in, send a message, watch the stream complete, log out. Fix rough edges on mobile — a large share of early traffic from social will be on phones.
+
+Publish minimal legal pages if you're charging money (terms + privacy). A custom domain helps, but don't let DNS block you from testing the core loop.
+
+## Sunday Morning: Deploy (about 2 hours)
+
+Push to Vercel (or your host of choice). Wire environment variables for production. Connect Stripe webhooks. Run a **full** payment test in test mode before flipping anything live.
+
+If you're not ready for live charges, a waitlist + email capture is still a launch — just be honest about what you're offering.
+
+## Sunday Afternoon: Launch (about 3 hours)
+
+Write a launch thread, post where your users actually hang out (relevant subreddits, Discord communities, LinkedIn, etc.), and ask for specific feedback ("What would you use this for?") rather than vague applause.
+
+Ten real conversations beat a hundred silent page views.
+
+## What You Skip (For Now)
+
+Defer: elaborate onboarding sequences, advanced analytics, A/B testing infrastructure, multi-model pickers, heavy admin tooling, teams/orgs — **until** you have users asking for them.
+
+## The Real Bottleneck
+
+The bottleneck is rarely the code. It's the **positioning**, the **prompt**, and the willingness to ship before everything feels perfect.
+
+When you're ready to skip weeks of foundation work, a purpose-built stack helps: see [buy vs build](/blog/buy-vs-build-saas-boilerplate) and our [weekend-friendly quick start](/docs/getting-started).
+
+---
+
+*Ignitra exists so you spend your weekend on the idea — not wiring webhooks for the fourth time. [Start with the docs](/docs/getting-started).*

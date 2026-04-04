@@ -1,0 +1,59 @@
+---
+title: "Next.js 15 App Router: What Changed for SaaS Developers"
+date: "2026-04-11"
+excerpt: "The practical changes in Next.js 15 that matter for SaaS products — Server Components, streaming, and the patterns that replaced getServerSideProps."
+author: "Ahmed Alaa"
+---
+
+# Next.js 15 App Router: What Changed for SaaS Developers
+
+Next.js 15 with the **App Router** is a real shift from the Pages Router era. If you're building a SaaS product, these are the changes that actually matter day to day.
+
+## Server Components by Default
+
+The biggest mental shift: components are **Server Components** unless you opt out. They run on the server, can talk to your database directly, and ship **less JavaScript** to the client.
+
+That's ideal for SaaS dashboards where most UI is data-heavy but not interactive. Add `'use client'` only when you need hooks, events, or browser APIs.
+
+A healthy SaaS codebase is often **mostly** server UI with **targeted** client islands — chat inputs, theme toggles, complex editors.
+
+## The New Data Fetching Pattern
+
+`getServerSideProps` and `getStaticProps` step aside. In the App Router, Server Components fetch with **async/await** at the top level. It reads like normal React code — fewer indirections, clearer data flow.
+
+For cache invalidation, reach for `revalidatePath()` / `revalidateTag()` instead of older ISR patterns.
+
+## Route Groups and Layouts
+
+**Route groups** — folders like `(dashboard)` or `(marketing)` — share layouts **without** changing URLs. That's how you give marketing pages a different shell than the authenticated app, while keeping URLs clean.
+
+Each segment can ship `layout.tsx`, `loading.tsx`, and `error.tsx`. `loading.tsx` gives you skeleton states automatically while slow queries resolve.
+
+## Streaming and Suspense
+
+Server Components support **streaming**: wrap slower subtrees in `<Suspense>` so the shell paints fast and data fills in as it arrives. For dashboards with multiple widgets, users see structure immediately instead of waiting on the slowest query.
+
+## Middleware for Auth
+
+`middleware.ts` runs before your route handlers — a natural place to enforce auth, redirect logged-out users, or gate admin routes. Doing this early avoids flashing protected content on the client.
+
+## Server Actions
+
+**Server Actions** (`'use server'`) replace many bespoke `POST` routes for mutations: call a server function directly from forms and interactive UI, with the execution guaranteed server-side.
+
+## The Practical Impact for SaaS
+
+In practice, the App Router tends to mean:
+
+- Faster perceived loads (less client JS)
+- Simpler data fetching (fewer prop bridges)
+- Cleaner route organization (groups + nested layouts)
+- Better loading UX (built-in `loading.tsx`)
+
+**Ignitra** is built on Next.js 15 App Router with these patterns: separate groups for marketing, auth, dashboard, and admin; Server Components by default; streaming for chat; middleware for session checks.
+
+If you're new to the stack, pair this with [streaming AI chat](/blog/streaming-ai-chat-nextjs) and [deployment](/docs/deployment) when you're ready to go live.
+
+---
+
+*Ignitra is a production-minded Next.js 15 starter for AI SaaS — routing, auth, and chat patterns included. [Explore the documentation](/docs/getting-started).*

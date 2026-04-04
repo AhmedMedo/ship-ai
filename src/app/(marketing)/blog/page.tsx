@@ -11,11 +11,13 @@ export const metadata: Metadata = {
     title: 'Blog — Ignitra',
     description: 'Tutorials, updates, and insights on building AI SaaS products with Ignitra.',
     url: '/blog',
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Ignitra Blog' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Blog — Ignitra',
     description: 'Tutorials, updates, and insights on building AI SaaS products with Ignitra.',
+    images: ['/opengraph-image'],
   },
 };
 
@@ -23,7 +25,7 @@ export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
-    <div className="mx-auto max-w-[800px] px-6 pb-20 pt-32">
+    <div className="mx-auto max-w-[880px] px-6 pb-20 pt-32">
       <h1
         className="mb-3 text-center font-black"
         style={{ fontSize: 'clamp(32px, 5vw, 48px)', letterSpacing: '-0.03em', color: '#F1F5F9' }}
@@ -39,7 +41,7 @@ export default function BlogPage() {
           No posts yet. Check back soon!
         </p>
       ) : (
-        <div className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2 lg:gap-5">
           {posts.map((post) => (
             <Link
               key={post.slug}
