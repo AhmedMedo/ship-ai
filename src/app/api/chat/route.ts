@@ -85,12 +85,16 @@ export async function POST(req: Request) {
       parsed.data;
     const modelId = requestedModel || process.env.AI_MODEL || MODELS.GPT_4O_MINI;
 
-    // 3. Check usage limits
+    // 3. Check usage limits (daily + monthly)
     const usageCheck = await checkUsageLimit(user.id);
     if (!usageCheck.allowed) {
+      const msg =
+        usageCheck.reason === 'monthly'
+          ? 'Monthly token limit reached. Resets on the 1st.'
+          : 'Daily token limit reached. Resets at midnight UTC.';
       return Response.json(
         {
-          error: 'Daily token limit reached',
+          error: msg,
           limit: usageCheck.limit,
           used: usageCheck.used,
         },

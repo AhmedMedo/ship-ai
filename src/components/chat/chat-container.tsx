@@ -25,6 +25,8 @@ export function ChatContainer({
   initialMessages,
 }: ChatContainerProps) {
   const [input, setInput] = useState('');
+  const [tokensUsed, setTokensUsed] = useState(0);
+  const [tokenLimit, setTokenLimit] = useState(100000);
   const scrollRef = useRef<HTMLDivElement>(null);
   const conversationIdFromResponse = useRef<string | null>(null);
   const router = useRouter();
@@ -57,11 +59,28 @@ export function ChatContainer({
         router.replace(`/dashboard/chat/${cid}`);
       }
       router.refresh();
+      // Refresh token usage after each response
+      fetchUsage();
     },
   });
 
   const [pendingSend, setPendingSend] = useState(false);
   const isLoading = status === 'streaming' || status === 'submitted' || pendingSend;
+
+  // Fetch current token usage
+  function fetchUsage() {
+    fetch('/api/usage?period=today')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.tokensUsed != null) setTokensUsed(data.tokensUsed);
+        if (data.tokenLimit != null) setTokenLimit(data.tokenLimit);
+      })
+      .catch(() => {});
+  }
+
+  useEffect(() => {
+    fetchUsage();
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -168,6 +187,8 @@ export function ChatContainer({
         onSubmit={handleSubmit}
         isLoading={isLoading}
         model={model}
+        tokensUsed={tokensUsed}
+        tokenLimit={tokenLimit}
       />
     </div>
   );

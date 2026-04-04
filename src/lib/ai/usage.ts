@@ -61,21 +61,54 @@ export async function getMonthTokens(userId: string): Promise<number> {
   return Number(result[0]?.total ?? 0);
 }
 
-// Check if the user is within their daily token limit
+// Check if the user is within their daily AND monthly token limits
 export async function checkUsageLimit(userId: string) {
-  const [plan, todayUsage] = await Promise.all([
+  const [plan, todayUsage, monthUsage] = await Promise.all([
     getUserPlan(userId),
     getTodayTokens(userId),
+    getMonthTokens(userId),
   ]);
 
   const dailyLimit = plan.tokenLimitDaily ?? 5000;
+  const monthlyLimit = plan.tokenLimitMonthly ?? 50000;
+
+  // Check monthly limit first (harder to recover from)
+  if (monthlyLimit > 0 && monthUsage >= monthlyLimit) {
+    return {
+      allowed: false,
+      limit: dailyLimit,
+      used: todayUsage,
+      remaining: 0,
+      monthlyLimit,
+      monthlyUsed: monthUsage,
+      planSlug: plan.planSlug ?? 'free',
+      reason: 'monthly' as const,
+    };
+  }
+
+  // Check daily limit
+  if (dailyLimit > 0 && todayUsage >= dailyLimit) {
+    return {
+      allowed: false,
+      limit: dailyLimit,
+      used: todayUsage,
+      remaining: 0,
+      monthlyLimit,
+      monthlyUsed: monthUsage,
+      planSlug: plan.planSlug ?? 'free',
+      reason: 'daily' as const,
+    };
+  }
 
   return {
-    allowed: todayUsage < dailyLimit,
+    allowed: true,
     limit: dailyLimit,
     used: todayUsage,
     remaining: Math.max(0, dailyLimit - todayUsage),
+    monthlyLimit,
+    monthlyUsed: monthUsage,
     planSlug: plan.planSlug ?? 'free',
+    reason: null,
   };
 }
 

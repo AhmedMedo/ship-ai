@@ -71,11 +71,46 @@ export async function GET() {
 
     const usageMap = new Map(usageByUser.map((u) => [u.userId, Number(u.tokens)]));
 
+    // Platform-wide token stats
+    const [platformTokensToday, platformTokensMonth, topUsersMonth] = await Promise.all([
+      db
+        .select({ total: sql<number>`COALESCE(SUM(input_tokens + output_tokens), 0)` })
+        .from(usageLogs)
+        .where(gte(usageLogs.createdAt, sql`CURRENT_DATE`)),
+      db
+        .select({ total: sql<number>`COALESCE(SUM(input_tokens + output_tokens), 0)` })
+        .from(usageLogs)
+        .where(gte(usageLogs.createdAt, sql`date_trunc('month', CURRENT_DATE)`)),
+      db
+        .select({
+          userId: usageLogs.userId,
+          email: profiles.email,
+          fullName: profiles.fullName,
+          tokens: sql<number>`COALESCE(SUM(input_tokens + output_tokens), 0)`,
+          cost: sql<number>`COALESCE(SUM(cost_usd::numeric), 0)`,
+        })
+        .from(usageLogs)
+        .leftJoin(profiles, eq(usageLogs.userId, profiles.id))
+        .where(gte(usageLogs.createdAt, sql`date_trunc('month', CURRENT_DATE)`))
+        .groupBy(usageLogs.userId, profiles.email, profiles.fullName)
+        .orderBy(sql`SUM(input_tokens + output_tokens) DESC`)
+        .limit(5),
+    ]);
+
     return Response.json({
       totalUsers: Number(totalUsers[0]?.count ?? 0),
       activeSubscriptions: Number(activeSubscriptions[0]?.count ?? 0),
       mrr: Number(mrrResult[0]?.total ?? 0),
       aiCostToday: Number(Number(aiCostToday[0]?.total ?? 0).toFixed(4)),
+      platformTokensToday: Number(platformTokensToday[0]?.total ?? 0),
+      platformTokensMonth: Number(platformTokensMonth[0]?.total ?? 0),
+      topUsersMonth: topUsersMonth.map((u) => ({
+        userId: u.userId,
+        email: u.email,
+        fullName: u.fullName,
+        tokens: Number(u.tokens),
+        cost: Number(Number(u.cost).toFixed(4)),
+      })),
       users: recentUsers.map((u) => ({
         id: u.id,
         fullName: u.fullName,

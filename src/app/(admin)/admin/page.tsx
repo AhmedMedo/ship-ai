@@ -2,13 +2,24 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Users, CreditCard, DollarSign, Zap } from 'lucide-react';
+import { Users, CreditCard, DollarSign, Zap, Activity, BarChart3 } from 'lucide-react';
+
+interface TopUser {
+  userId: string;
+  email: string | null;
+  fullName: string | null;
+  tokens: number;
+  cost: number;
+}
 
 interface AdminStats {
   totalUsers: number;
   activeSubscriptions: number;
   mrr: number;
   aiCostToday: number;
+  platformTokensToday: number;
+  platformTokensMonth: number;
+  topUsersMonth: TopUser[];
 }
 
 export default function AdminPage() {
@@ -61,14 +72,28 @@ export default function AdminPage() {
       icon: Zap,
       format: (v: number) => `$${v.toFixed(2)}`,
     },
+    {
+      label: 'Tokens Today',
+      value: stats?.platformTokensToday ?? 0,
+      icon: Activity,
+      format: (v: number) => v.toLocaleString(),
+    },
+    {
+      label: 'Tokens This Month',
+      value: stats?.platformTokensMonth ?? 0,
+      icon: BarChart3,
+      format: (v: number) => v.toLocaleString(),
+    },
   ];
+
+  const topUsers = stats?.topUsersMonth ?? [];
 
   return (
     <>
       <h1 className="mb-6 text-xl font-bold">Admin Overview</h1>
 
       {/* Stats cards */}
-      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-3">
         {cards.map((card) => (
           <div key={card.label} className="rounded-xl border bg-card p-5">
             <div className="mb-2 flex items-center gap-2 text-[13px] font-medium text-muted-foreground">
@@ -82,12 +107,47 @@ export default function AdminPage() {
         ))}
       </div>
 
-      <Link
-        href="/admin/users"
-        className="text-sm font-semibold text-primary"
-      >
-        Manage users →
-      </Link>
+      {/* Top Users by Token Usage */}
+      {topUsers.length > 0 && (
+        <div className="mb-8">
+          <h2 className="mb-3 text-sm font-bold text-muted-foreground">Top Users This Month</h2>
+          <div className="overflow-hidden rounded-xl border bg-card">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-muted">
+                  <th className="border-b px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">User</th>
+                  <th className="border-b px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tokens</th>
+                  <th className="border-b px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topUsers.map((u, i) => (
+                  <tr key={u.userId}>
+                    <td className={`px-4 py-3 text-[13px] font-semibold ${i < topUsers.length - 1 ? 'border-b' : ''}`}>
+                      {u.fullName || u.email || '—'}
+                    </td>
+                    <td className={`px-4 py-3 text-[13px] ${i < topUsers.length - 1 ? 'border-b' : ''}`}>
+                      {u.tokens.toLocaleString()}
+                    </td>
+                    <td className={`px-4 py-3 text-[13px] text-muted-foreground ${i < topUsers.length - 1 ? 'border-b' : ''}`}>
+                      ${u.cost.toFixed(4)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-4">
+        <Link href="/admin/users" className="text-sm font-semibold text-primary">
+          Manage users →
+        </Link>
+        <Link href="/admin/leads" className="text-sm font-semibold text-primary">
+          View leads →
+        </Link>
+      </div>
     </>
   );
 }

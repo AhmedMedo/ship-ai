@@ -73,8 +73,18 @@ export function ChatInput({
         </div>
       </form>
       <div className="flex justify-between px-1 pt-1.5 text-[11px] text-muted-foreground">
-        <span>Model: {model}</span>
-        <span>{tokensUsed.toLocaleString()} / {tokenLimit.toLocaleString()} tokens today</span>
+        {model && <span>Model: {model}</span>}
+        <span
+          className={
+            tokenLimit > 0 && tokensUsed / tokenLimit >= 0.9
+              ? 'text-red-500'
+              : tokenLimit > 0 && tokensUsed / tokenLimit >= 0.7
+                ? 'text-yellow-500'
+                : ''
+          }
+        >
+          {tokensUsed.toLocaleString()} / {tokenLimit.toLocaleString()} tokens today
+        </span>
       </div>
     </div>
   );
