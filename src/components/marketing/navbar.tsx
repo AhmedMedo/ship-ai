@@ -9,7 +9,7 @@ import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 const navLinks = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Docs', href: '#' },
+  { label: 'Docs', href: '/blog' },
   { label: 'Blog', href: '/blog' },
 ];
 

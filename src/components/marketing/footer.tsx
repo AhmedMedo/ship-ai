@@ -9,24 +9,23 @@ const columns = [
     links: [
       { label: 'Features', href: '#features' },
       { label: 'Pricing', href: '#pricing' },
-      { label: 'Demo', href: '/dashboard/chat' },
-      { label: 'Changelog', href: '#' },
+      { label: 'Demo', href: '/login' },
+      { label: 'Blog', href: '/blog' },
     ],
   },
   {
     title: 'Resources',
     links: [
-      { label: 'Docs', href: '#' },
-      { label: 'Blog', href: '#' },
-      { label: 'Support', href: '#' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Sign up', href: '/signup' },
+      { label: 'Log in', href: '/login' },
     ],
   },
   {
-    title: 'Company',
+    title: 'Connect',
     links: [
-      { label: 'About', href: '#' },
-      { label: 'Twitter/X', href: '#' },
-      { label: 'GitHub', href: '#' },
+      { label: 'Twitter/X', href: 'https://x.com/AhmedAlaa707', external: true },
+      { label: 'Email', href: 'mailto:info@ignitra.dev' },
     ],
   },
 ];

@@ -82,12 +82,12 @@ export function PricingSection() {
         >
           Pricing
         </div>
-        <div
+        <h2
           className="reveal-item mb-4 text-center font-black"
           style={{ fontSize: 'clamp(30px,4vw,46px)', letterSpacing: '-0.03em', color: '#F1F5F9' }}
         >
           Invest once, ship forever
-        </div>
+        </h2>
         <p
           className="reveal-item mx-auto mb-[60px] max-w-[560px] text-center text-[16px] leading-[1.7]"
           style={{ color: '#94A3B8' }}

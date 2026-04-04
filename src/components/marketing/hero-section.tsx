@@ -291,7 +291,9 @@ export function HeroSection() {
         </motion.div>
 
         <motion.h1
-          {...fadeUpProps(0.1)}
+          initial={false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
           className="mx-auto mb-7 max-w-[900px] font-black"
           style={{
             fontSize: 'clamp(48px, 7vw, 82px)',
