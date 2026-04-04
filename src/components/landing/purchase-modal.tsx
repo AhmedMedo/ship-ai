@@ -127,7 +127,7 @@ export function PurchaseModal({ isOpen, onClose, defaultPlan = 'pro' }: Purchase
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Ahmed Alaa"
+                  placeholder="John Doe"
                   className="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-gray-500 transition-colors focus:border-[#3498DB] focus:outline-none focus:ring-1 focus:ring-[#3498DB]/50"
                 />
               </div>
