@@ -6,7 +6,7 @@ import { KofiButton } from '@/components/marketing/kofi-button';
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark min-h-screen" style={{ background: '#030014', color: '#F1F5F9' }}>
+    <div className="dark min-h-screen scroll-smooth" style={{ background: '#030014', color: '#F1F5F9' }}>
       <PurchaseModalProvider>
         {children}
         <KofiButton />

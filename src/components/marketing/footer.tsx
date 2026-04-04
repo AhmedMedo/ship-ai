@@ -11,13 +11,13 @@ const columns = [
       { label: 'Pricing', href: '#pricing' },
       { label: 'Demo', href: '/login' },
       { label: 'Blog', href: '/blog' },
+      { label: 'About', href: '/about' },
     ],
   },
   {
     title: 'Resources',
     links: [
       { label: 'Blog', href: '/blog' },
-      { label: 'License', href: '/license' },
       { label: 'Sign up', href: '/signup' },
       { label: 'Log in', href: '/login' },
     ],
@@ -76,6 +76,33 @@ export function Footer() {
         className="mx-auto max-w-[1200px] border-t px-6 py-6 text-[13px]"
         style={{ borderColor: 'rgba(255,255,255,0.06)', color: '#4B5563' }}
       >
+        <nav
+          className="mb-5 flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-[13px] sm:justify-start"
+          aria-label="Legal"
+        >
+          {(
+            [
+              ['Terms', '/terms'],
+              ['Privacy', '/privacy'],
+              ['About', '/about'],
+              ['License', '/license'],
+            ] as const
+          ).map(([label, href], i) => (
+            <span key={href} className="inline-flex items-center">
+              {i > 0 ? (
+                <span className="mx-2 select-none opacity-30" aria-hidden>
+                  ·
+                </span>
+              ) : null}
+              <Link
+                href={href}
+                className="text-white/45 transition-colors hover:text-white/75"
+              >
+                {label}
+              </Link>
+            </span>
+          ))}
+        </nav>
         <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
           <span>© 2026 Ignitra. All rights reserved.</span>
           <a

@@ -1,36 +1,47 @@
 import type { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
-import { Navbar } from '@/components/marketing/navbar';
-import { Footer } from '@/components/marketing/footer';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { MarketingDocLayout } from '@/components/marketing/marketing-doc-layout';
 
 export const metadata: Metadata = {
-  title: 'License — Ignitra',
+  title: 'License',
   description: 'Ignitra License Agreement — terms of use for the Ignitra SaaS boilerplate.',
   alternates: { canonical: '/license' },
+  openGraph: {
+    title: 'License Agreement | Ignitra',
+    description: 'License terms for the Ignitra source code.',
+    url: '/license',
+  },
 };
 
-export default function LicensePage() {
-  const content = fs.readFileSync(path.join(process.cwd(), 'LICENSE.md'), 'utf-8');
+const section =
+  'mt-12 scroll-mt-28 border-b border-white/10 pb-2 text-xl font-semibold text-[#F1F5F9] first:mt-0';
 
-  // Simple markdown-to-HTML conversion for the license
-  const html = content
-    .replace(/^# (.+)$/gm, '<h1 class="mb-4 text-3xl font-black" style="color:#F1F5F9">$1</h1>')
-    .replace(/^## (.+)$/gm, '<h2 class="mt-10 mb-3 text-xl font-bold" style="color:#F1F5F9">$1</h2>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#F1F5F9">$1</strong>')
-    .replace(/^- (.+)$/gm, '<li class="ml-4 py-0.5">$1</li>')
-    .replace(/^(?!<[hl]|<li|<str|<hr|---)(.*\S.*)$/gm, '<p class="my-2">$1</p>')
-    .replace(/^---$/gm, '<hr class="my-8 border-white/10" />');
+export default function LicensePage() {
+  const raw = fs.readFileSync(path.join(process.cwd(), 'LICENSE.md'), 'utf-8');
+  const md = raw.replace(/^#[^\n]+\n+/, '').replace(/^Last Updated:[^\n]+\n+/, '');
 
   return (
-    <>
-      <Navbar />
-      <main
-        className="mx-auto max-w-[720px] px-6 pb-20 pt-32 text-[15px] leading-[1.8]"
-        style={{ color: '#94A3B8' }}
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
-      <Footer />
-    </>
+    <MarketingDocLayout title="Ignitra License Agreement" lastUpdated="April 4, 2026">
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h2: ({ children }) => <h2 className={section}>{children}</h2>,
+          p: ({ children }) => <p className="my-3">{children}</p>,
+          ul: ({ children }) => (
+            <ul className="my-4 list-disc space-y-2 pl-5">{children}</ul>
+          ),
+          li: ({ children }) => <li className="py-0.5">{children}</li>,
+          strong: ({ children }) => (
+            <strong className="font-semibold text-[#E2E8F0]">{children}</strong>
+          ),
+          hr: () => <hr className="my-10 border-white/10" />,
+        }}
+      >
+        {md}
+      </ReactMarkdown>
+    </MarketingDocLayout>
   );
 }
