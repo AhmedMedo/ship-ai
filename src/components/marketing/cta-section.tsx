@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 
 export function CtaSection() {
+  const { openModal } = usePurchaseModal();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,8 +45,8 @@ export function CtaSection() {
         <p className="relative mb-8 text-[16px]" style={{ color: '#94A3B8' }}>
           Stop rebuilding. Start shipping.
         </p>
-        <Link
-          href="/signup"
+        <button
+          onClick={() => openModal('pro')}
           className="relative inline-block rounded-xl px-9 py-4 text-[16px] font-bold text-white transition-all"
           style={{
             background: 'linear-gradient(135deg, #0F4C75, #3498DB)',
@@ -61,7 +62,7 @@ export function CtaSection() {
           }}
         >
           Get Ignitra — $249
-        </Link>
+        </button>
       </div>
 
       <style>{`

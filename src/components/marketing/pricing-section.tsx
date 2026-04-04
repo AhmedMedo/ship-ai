@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 
 const plans = [
   {
@@ -56,6 +56,7 @@ const plans = [
 ];
 
 export function PricingSection() {
+  const { openModal } = usePurchaseModal();
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -150,8 +151,8 @@ export function PricingSection() {
                 ))}
               </ul>
 
-              <Link
-                href="/signup"
+              <button
+                onClick={() => openModal(plan.name.toLowerCase() as 'starter' | 'pro' | 'enterprise')}
                 className="block w-full rounded-[10px] py-3 text-center text-[15px] font-bold transition-all"
                 style={
                   plan.featured
@@ -176,7 +177,7 @@ export function PricingSection() {
                 }}
               >
                 Get {plan.name}
-              </Link>
+              </button>
             </div>
           ))}
         </div>

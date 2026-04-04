@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 
 const techStack = [
   {
@@ -91,6 +92,7 @@ function fadeUpProps(delay = 0) {
 }
 
 export function HeroSection() {
+  const { openModal } = usePurchaseModal();
   const sceneRef = useRef<HTMLDivElement>(null);
   const shapesRef = useRef<HTMLElement[]>([]);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
@@ -325,8 +327,8 @@ export function HeroSection() {
           {...fadeUpProps(0.3)}
           className="flex flex-col items-center justify-center gap-3.5 sm:flex-row"
         >
-          <Link
-            href="/signup"
+          <button
+            onClick={() => openModal('pro')}
             className="rounded-xl px-9 py-4 text-[16px] font-bold text-white transition-all"
             style={{
               background: 'linear-gradient(135deg, #0F4C75, #3498DB)',
@@ -342,7 +344,7 @@ export function HeroSection() {
             }}
           >
             Get Ignitra — $249
-          </Link>
+          </button>
           <Link
             href="/dashboard/chat"
             className="rounded-xl px-9 py-4 text-[16px] font-bold transition-all"

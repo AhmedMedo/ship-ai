@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Logo } from '@/components/shared/logo';
+import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 
 const navLinks = [
   { label: 'Features', href: '#features' },
@@ -25,6 +26,7 @@ function scrollTo(href: string) {
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const { openModal } = usePurchaseModal();
 
   return (
     <nav
@@ -94,8 +96,8 @@ export function Navbar() {
           >
             Log in
           </Link>
-          <Link
-            href="/signup"
+          <button
+            onClick={() => openModal('pro')}
             className="rounded-lg px-5 py-2 text-[13px] font-semibold text-white transition-all"
             style={{ background: '#0F4C75' }}
             onMouseEnter={(e) => {
@@ -108,7 +110,7 @@ export function Navbar() {
             }}
           >
             Get Ignitra
-          </Link>
+          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -162,13 +164,13 @@ export function Navbar() {
             >
               Log in
             </Link>
-            <Link
-              href="/signup"
+            <button
+              onClick={() => { openModal('pro'); setOpen(false); }}
               className="rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white"
               style={{ background: '#0F4C75' }}
             >
               Get Ignitra
-            </Link>
+            </button>
           </div>
         </div>
       )}

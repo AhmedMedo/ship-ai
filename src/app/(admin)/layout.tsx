@@ -11,6 +11,7 @@ import { createClient } from '@/lib/supabase/client';
 const adminNav = [
   { label: 'Overview', href: '/admin' },
   { label: 'Users', href: '/admin/users' },
+  { label: 'Leads', href: '/admin/leads' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

@@ -127,6 +127,19 @@ export const usageLogs = pgTable('usage_logs', {
   index('idx_usage_user_date').on(table.userId, table.createdAt),
 ]);
 
+// ─── Leads ──────────────────────────────────────────────────────────────────
+// Purchase interest / waitlist leads from the landing page.
+
+export const leads = pgTable('leads', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  githubUsername: text('github_username'),
+  plan: text('plan').notNull().default('pro'),
+  message: text('message'),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
 // ─── Relations ───────────────────────────────────────────────────────────────
 
 export const plansRelations = relations(plans, ({ many }) => ({
@@ -180,3 +193,6 @@ export type NewMessage = typeof messages.$inferInsert;
 
 export type UsageLog = typeof usageLogs.$inferSelect;
 export type NewUsageLog = typeof usageLogs.$inferInsert;
+
+export type Lead = typeof leads.$inferSelect;
+export type NewLead = typeof leads.$inferInsert;
