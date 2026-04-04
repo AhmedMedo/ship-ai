@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Logo } from '@/components/shared/logo';
+import { NewsletterForm } from '@/components/landing/newsletter-form';
 
 const columns = [
   {
@@ -9,6 +10,7 @@ const columns = [
     links: [
       { label: 'Features', href: '#features' },
       { label: 'Pricing', href: '#pricing' },
+      { label: 'Contact', href: '/#contact' },
       { label: 'Demo', href: '/login' },
       { label: 'Blog', href: '/blog' },
       { label: 'About', href: '/about' },
@@ -69,6 +71,19 @@ export function Footer() {
             ))}
           </div>
         ))}
+
+        <div className="max-w-xs">
+          <h4
+            className="mb-3 text-[12px] font-bold uppercase tracking-[1px] text-gray-500"
+          >
+            Stay updated
+          </h4>
+          <p className="mb-3 text-sm text-gray-400">
+            Get notified about new features, AI development tips, and special offers.
+          </p>
+          <NewsletterForm />
+          <p className="mt-2 text-xs text-gray-500">No spam. Unsubscribe anytime.</p>
+        </div>
       </div>
 
       {/* Bottom bar */}

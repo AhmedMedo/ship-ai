@@ -140,6 +140,46 @@ export const leads = pgTable('leads', {
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
 
+// ─── Marketing: contact form ─────────────────────────────────────────────────
+export const contacts = pgTable(
+  'contacts',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    subject: text('subject').notNull(),
+    message: text('message').notNull(),
+    status: text('status').notNull().default('new'),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('contacts_created_at_idx').on(table.createdAt),
+    index('contacts_status_idx').on(table.status),
+    check('contacts_status_check', sql`${table.status} IN ('new', 'read', 'replied')`),
+  ],
+);
+
+// ─── Newsletter subscribers ─────────────────────────────────────────────────
+export const newsletterSubscribers = pgTable(
+  'newsletter_subscribers',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    email: text('email').notNull().unique(),
+    status: text('status').notNull().default('active'),
+    source: text('source').default('footer'),
+    subscribedAt: timestamp('subscribed_at', { withTimezone: true, mode: 'date' }).notNull().defaultNow(),
+    unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true, mode: 'date' }),
+  },
+  (table) => [
+    index('newsletter_email_idx').on(table.email),
+    index('newsletter_status_idx').on(table.status),
+    check(
+      'newsletter_status_check',
+      sql`${table.status} IN ('active', 'unsubscribed')`,
+    ),
+  ],
+);
+
 // ─── Relations ───────────────────────────────────────────────────────────────
 
 export const plansRelations = relations(plans, ({ many }) => ({
@@ -196,3 +236,9 @@ export type NewUsageLog = typeof usageLogs.$inferInsert;
 
 export type Lead = typeof leads.$inferSelect;
 export type NewLead = typeof leads.$inferInsert;
+
+export type Contact = typeof contacts.$inferSelect;
+export type NewContact = typeof contacts.$inferInsert;
+
+export type NewsletterSubscriber = typeof newsletterSubscribers.$inferSelect;
+export type NewNewsletterSubscriber = typeof newsletterSubscribers.$inferInsert;

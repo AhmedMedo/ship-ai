@@ -12,6 +12,7 @@ const adminNav = [
   { label: 'Overview', href: '/admin' },
   { label: 'Users', href: '/admin/users' },
   { label: 'Leads', href: '/admin/leads' },
+  { label: 'Contacts', href: '/admin/contacts' },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
