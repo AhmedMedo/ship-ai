@@ -25,18 +25,60 @@ export const metadata: Metadata = {
   description:
     'Launch your AI SaaS in days, not months. Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing.',
   icons: {
-    icon: '/favicon.svg',
-    apple: '/favicon.svg',
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
   openGraph: {
     siteName: 'Ignitra',
     locale: 'en_US',
     type: 'website',
-    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Ignitra — The AI-Native SaaS Boilerplate' }],
+    url: 'https://ignitra.dev',
+    title: 'Ignitra — Launch your AI SaaS in days, not months',
+    description:
+      'The Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing.',
+    images: [
+      {
+        url: 'https://ignitra.dev/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Ignitra — The AI-Native SaaS Boilerplate',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/opengraph-image'],
+    title: 'Ignitra — Launch your AI SaaS in days, not months',
+    description:
+      'Next.js boilerplate with auth, payments, AI chat, token tracking.',
+    images: ['https://ignitra.dev/og-image.png'],
+    creator: '@AhmedAlaa707',
+  },
+};
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Ignitra',
+  url: 'https://ignitra.dev',
+  description:
+    'AI-native Next.js SaaS boilerplate with auth, payments, streaming chat, token tracking, and usage-based billing.',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'AggregateOffer',
+    lowPrice: '149',
+    highPrice: '499',
+    priceCurrency: 'USD',
+  },
+  author: {
+    '@type': 'Person',
+    name: 'Ahmed Alaa',
+    url: 'https://twitter.com/AhmedAlaa707',
   },
 };
 
@@ -44,6 +86,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} min-h-screen font-sans antialiased`} suppressHydrationWarning>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}
           {isVercelProduction ? <Analytics /> : null}
