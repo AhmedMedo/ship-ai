@@ -17,6 +17,7 @@ const columns = [
     title: 'Resources',
     links: [
       { label: 'Blog', href: '/blog' },
+      { label: 'License', href: '/license' },
       { label: 'Sign up', href: '/signup' },
       { label: 'Log in', href: '/login' },
     ],
