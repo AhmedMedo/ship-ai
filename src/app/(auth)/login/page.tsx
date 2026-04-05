@@ -68,7 +68,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-muted/50 p-4">
       <div className="w-full max-w-[420px] rounded-2xl border bg-card p-10">
         <div className="mb-7 flex justify-center">
-          <Link href="/">
+          <Link href="/" aria-label="Ignitra — home">
             <Logo variant="icon" size="lg" />
           </Link>
         </div>

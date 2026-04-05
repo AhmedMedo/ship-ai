@@ -40,7 +40,7 @@ export function Navbar() {
     >
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5" aria-label="Ignitra — home">
           <Logo size="md" />
         </Link>
 
@@ -120,6 +120,8 @@ export function Navbar() {
           className="flex items-center justify-center md:hidden"
           onClick={() => setOpen(!open)}
           style={{ color: '#94A3B8' }}
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>

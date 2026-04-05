@@ -43,7 +43,7 @@ export function Footer() {
         {/* Brand */}
         <div className="max-w-[280px]">
           <Logo size="md" className="mb-1" />
-          <p className="mt-2 text-[13px] leading-[1.6]" style={{ color: '#4B5563' }}>
+          <p className="mt-2 text-[13px] leading-[1.6]" style={{ color: '#6B7280' }}>
             The AI-native SaaS boilerplate for developers who ship fast.
           </p>
         </div>
@@ -53,7 +53,7 @@ export function Footer() {
           <div key={col.title}>
             <h4
               className="mb-3.5 text-[12px] font-bold uppercase tracking-[1px]"
-              style={{ color: '#4B5563' }}
+              style={{ color: '#6B7280' }}
             >
               {col.title}
             </h4>
@@ -89,7 +89,7 @@ export function Footer() {
       {/* Bottom bar */}
       <div
         className="mx-auto max-w-[1200px] border-t px-6 py-6 text-[13px]"
-        style={{ borderColor: 'rgba(255,255,255,0.06)', color: '#4B5563' }}
+        style={{ borderColor: 'rgba(255,255,255,0.06)', color: '#6B7280' }}
       >
         <nav
           className="mb-5 flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-[13px] sm:justify-start"

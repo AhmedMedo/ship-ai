@@ -129,13 +129,13 @@ export function PricingSection() {
               )}
 
               <div className="mb-1 text-[20px] font-bold" style={{ color: '#F1F5F9' }}>{plan.name}</div>
-              <div className="mb-5 text-[13px]" style={{ color: '#4B5563' }}>{plan.desc}</div>
+              <div className="mb-5 text-[13px]" style={{ color: '#6B7280' }}>{plan.desc}</div>
 
               <div className="mb-1 font-black leading-none" style={{ fontSize: 52, letterSpacing: '-0.04em', color: '#F1F5F9' }}>
                 {plan.price}
-                <span className="ml-1 text-[16px] font-medium" style={{ color: '#4B5563' }}>one-time</span>
+                <span className="ml-1 text-[16px] font-medium" style={{ color: '#6B7280' }}>one-time</span>
               </div>
-              <div className="mb-6 text-[12px]" style={{ color: '#4B5563' }}>{plan.note}</div>
+              <div className="mb-6 text-[12px]" style={{ color: '#6B7280' }}>{plan.note}</div>
 
               <ul className="mb-7 space-y-0">
                 {plan.features.map((feat) => (

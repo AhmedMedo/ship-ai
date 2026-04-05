@@ -155,8 +155,9 @@ export function ContactSection() {
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-300">Subject</label>
+                  <label htmlFor="contact-subject" className="mb-1.5 block text-sm font-medium text-gray-300">Subject</label>
                   <select
+                    id="contact-subject"
                     required
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}

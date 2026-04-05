@@ -26,7 +26,7 @@ export function DemoSection() {
             <div className="h-2.5 w-2.5 rounded-full bg-green-500" />
             <span
               className="flex-1 text-center text-[11px]"
-              style={{ color: '#4B5563' }}
+              style={{ color: '#6B7280' }}
             >
               ignitra.dev/dashboard/chat
             </span>
