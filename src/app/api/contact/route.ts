@@ -5,7 +5,7 @@ import { contacts } from '@/db/schema';
 import { sendEmail } from '@/lib/email/resend';
 import { escapeHtml } from '@/lib/html-escape';
 
-const NOTIFY_TO = 'info@ignitra.dev';
+const NOTIFY_TO = 'ahmed.alaa.eldin.hamdy@gmail.com';
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
