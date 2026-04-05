@@ -1,6 +1,20 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  transpilePackages: [
+    'react-markdown',
+    'remark-gfm',
+    'remark-parse',
+    'rehype-stringify',
+    'unified',
+    'vfile',
+    'vfile-message',
+    'unist-util-stringify-position',
+    'mdast-util-from-markdown',
+    'mdast-util-to-string',
+    'micromark',
+  ],
+
   experimental: {
     optimizePackageImports: [
       'lucide-react',
