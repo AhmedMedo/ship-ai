@@ -89,10 +89,22 @@ export function PricingSection() {
           Invest once, ship forever
         </h2>
         <p
-          className="reveal-item mx-auto mb-[60px] max-w-[560px] text-center text-[16px] leading-[1.7]"
+          className="reveal-item mx-auto mb-4 max-w-[560px] text-center text-[16px] leading-[1.7]"
           style={{ color: '#94A3B8' }}
         >
           One-time purchase. Lifetime updates. Unlimited projects.
+        </p>
+        <p className="reveal-item mx-auto mb-[60px] text-center text-[14px]" style={{ color: '#64748B' }}>
+          Not sure yet?{' '}
+          <button
+            type="button"
+            onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}
+            className="underline transition-colors hover:text-white/70"
+            style={{ color: '#94A3B8' }}
+          >
+            Get the free starter kit
+          </button>{' '}
+          first.
         </p>
 
         <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-3">

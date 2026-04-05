@@ -1,23 +1,22 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
+import { LeadCaptureForm } from '@/components/landing/lead-capture-form';
 
 export function CtaSection() {
-  const { openModal } = usePurchaseModal();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('reveal-visible')),
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     ref.current?.querySelectorAll('.reveal-item').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="relative z-[1] px-6 pb-20 pt-4" ref={ref}>
+    <section id="cta" className="relative z-[1] px-6 pb-20 pt-4" ref={ref}>
       <div
         className="reveal-item relative mx-auto max-w-[1200px] overflow-hidden rounded-3xl border px-10 py-20 text-center"
         style={{
@@ -29,8 +28,10 @@ export function CtaSection() {
         <div
           className="pointer-events-none absolute"
           style={{
-            top: '50%', left: '50%',
-            width: 600, height: 600,
+            top: '50%',
+            left: '50%',
+            width: 600,
+            height: 600,
             transform: 'translate(-50%,-50%)',
             background: 'radial-gradient(circle, rgba(15,76,117,0.15), transparent 70%)',
           }}
@@ -43,26 +44,20 @@ export function CtaSection() {
           Ready to launch your AI SaaS?
         </h2>
         <p className="relative mb-8 text-[16px]" style={{ color: '#94A3B8' }}>
-          Stop rebuilding. Start shipping.
+          Get the free starter kit and launch checklist. Start building today.
         </p>
-        <button
-          onClick={() => openModal('pro')}
-          className="relative inline-block rounded-xl px-9 py-4 text-[16px] font-bold text-white transition-all"
-          style={{
-            background: 'linear-gradient(135deg, #0F4C75, #3498DB)',
-            boxShadow: '0 0 50px rgba(15,76,117,0.3)',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 80px rgba(15,76,117,0.5)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 0 50px rgba(15,76,117,0.3)';
-            e.currentTarget.style.transform = 'none';
-          }}
-        >
-          Get Ignitra — $249
-        </button>
+
+        <div className="relative mx-auto flex max-w-[480px] justify-center">
+          <LeadCaptureForm
+            ctaText="Get Free Starter Kit"
+            source="bottom-cta"
+            variant="inline"
+          />
+        </div>
+
+        <p className="relative mt-6 text-[13px]" style={{ color: '#64748B' }}>
+          Early adopters get priority access to V2 features. No spam, ever.
+        </p>
       </div>
 
       <style>{`

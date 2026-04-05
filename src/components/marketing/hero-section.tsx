@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
+import { LeadCaptureForm } from '@/components/landing/lead-capture-form';
 import { RotatingText } from '@/components/marketing/rotating-text';
 
 const techStack = [
@@ -93,7 +92,6 @@ function fadeUpProps(delay = 0) {
 }
 
 export function HeroSection() {
-  const { openModal } = usePurchaseModal();
   const sceneRef = useRef<HTMLDivElement>(null);
   const shapesRef = useRef<HTMLElement[]>([]);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
@@ -317,53 +315,35 @@ export function HeroSection() {
 
         <motion.p
           {...fadeUpProps(0.2)}
-          className="mx-auto mb-10 max-w-[580px] text-[18px] leading-[1.7]"
+          className="mx-auto mb-10 max-w-[620px] text-[18px] leading-[1.7]"
           style={{ color: '#94A3B8' }}
         >
-          Launch your AI SaaS in 24 hours with a production-ready Next.js boilerplate.
+          The production-ready Next.js boilerplate with auth, payments, AI chat, and usage billing.
+          Clone it. Customize it. Launch this week.
         </motion.p>
 
         <motion.div
           {...fadeUpProps(0.3)}
-          className="flex flex-col items-center justify-center gap-3.5 sm:flex-row"
+          className="flex flex-col items-center gap-4"
         >
-          <Link
-            href="/dashboard/chat"
-            className="rounded-xl px-9 py-4 text-[16px] font-bold text-white transition-all"
-            style={{
-              background: 'linear-gradient(135deg, #0F4C75, #3498DB)',
-              boxShadow: '0 0 50px rgba(15,76,117,0.3)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 80px rgba(15,76,117,0.5)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 0 50px rgba(15,76,117,0.3)';
-              e.currentTarget.style.transform = 'none';
-            }}
-          >
-            See Demo
-          </Link>
-          <button
-            onClick={() => openModal('pro')}
-            className="rounded-xl px-9 py-4 text-[16px] font-bold transition-all"
-            style={{
-              background: 'transparent',
-              color: '#F1F5F9',
-              border: '1.5px solid rgba(255,255,255,0.12)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.25)';
-              e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.12)';
-              e.currentTarget.style.background = 'transparent';
-            }}
-          >
-            Get Ignitra — $249
-          </button>
+          <LeadCaptureForm
+            ctaText="Get Free AI SaaS Starter Kit"
+            source="hero"
+            variant="inline"
+          />
+          <p className="text-[13px]" style={{ color: '#64748B' }}>
+            Join 50+ developers building with Ignitra.{' '}
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="underline transition-colors hover:text-white/70"
+              style={{ color: '#94A3B8' }}
+            >
+              See live demo
+            </button>
+          </p>
         </motion.div>
       </div>
 

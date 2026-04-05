@@ -2,10 +2,11 @@ import type { Metadata } from 'next';
 import { Navbar } from '@/components/marketing/navbar';
 import { HeroSection } from '@/components/marketing/hero-section';
 import { DemoSection } from '@/components/marketing/demo-section';
+import { AudienceSection } from '@/components/marketing/audience-section';
 import { FeaturesSection } from '@/components/marketing/features-section';
+import { SocialProofSection } from '@/components/marketing/social-proof-section';
 import { PricingSection } from '@/components/marketing/pricing-section';
 import { CtaSection } from '@/components/marketing/cta-section';
-import { ContactSection } from '@/components/landing/contact-section';
 import { Footer } from '@/components/marketing/footer';
 
 export const metadata: Metadata = {
@@ -61,10 +62,11 @@ export default function HomePage() {
       <main>
         <HeroSection />
         <DemoSection />
+        <AudienceSection />
         <FeaturesSection />
+        <SocialProofSection />
         <PricingSection />
         <CtaSection />
-        <ContactSection />
       </main>
 
       <Footer />

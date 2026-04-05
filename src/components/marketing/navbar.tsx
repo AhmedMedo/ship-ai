@@ -4,12 +4,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Logo } from '@/components/shared/logo';
-import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
 
 const navLinks = [
   { label: 'Features', href: '#features' },
   { label: 'Pricing', href: '#pricing' },
-  { label: 'Contact', href: '#contact' },
   { label: 'Docs', href: '/docs/getting-started' },
   { label: 'Blog', href: '/blog' },
 ];
@@ -27,7 +25,6 @@ function scrollTo(href: string) {
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const { openModal } = usePurchaseModal();
 
   return (
     <nav
@@ -98,7 +95,8 @@ export function Navbar() {
             Log in
           </Link>
           <button
-            onClick={() => openModal('pro')}
+            type="button"
+            onClick={() => scrollTo('#cta')}
             className="rounded-lg px-5 py-2 text-[13px] font-semibold text-white transition-all"
             style={{ background: '#0F4C75' }}
             onMouseEnter={(e) => {
@@ -110,7 +108,7 @@ export function Navbar() {
               e.currentTarget.style.transform = 'none';
             }}
           >
-            Get Ignitra
+            Get Free Kit
           </button>
         </div>
 
@@ -168,11 +166,12 @@ export function Navbar() {
               Log in
             </Link>
             <button
-              onClick={() => { openModal('pro'); setOpen(false); }}
+              type="button"
+              onClick={() => { scrollTo('#cta'); setOpen(false); }}
               className="rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white"
               style={{ background: '#0F4C75' }}
             >
-              Get Ignitra
+              Get Free Kit
             </button>
           </div>
         </div>
