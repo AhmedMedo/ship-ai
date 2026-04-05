@@ -1,6 +1,20 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'framer-motion',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-separator',
+      '@radix-ui/react-sheet',
+      '@radix-ui/react-toast',
+      'ai',
+    ],
+  },
+
   images: {
     remotePatterns: [
       {

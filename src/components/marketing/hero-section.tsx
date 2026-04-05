@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePurchaseModal } from '@/components/landing/purchase-modal-provider';
+import { RotatingText } from '@/components/marketing/rotating-text';
 
 const techStack = [
   {
@@ -309,19 +310,9 @@ export function HeroSection() {
             color: '#F1F5F9',
           }}
         >
-          Launch your{' '}
-          <span
-            style={{
-              background: 'linear-gradient(135deg, #3498DB, #06B6D4 50%, #7C3AED)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            AI SaaS
-          </span>
+          Stop wasting weeks rebuilding
           <br />
-          in days, not months
+          <RotatingText words={['auth', 'billing', 'AI chat', 'usage tracking']} />
         </motion.h1>
 
         <motion.p
@@ -329,15 +320,15 @@ export function HeroSection() {
           className="mx-auto mb-10 max-w-[580px] text-[18px] leading-[1.7]"
           style={{ color: '#94A3B8' }}
         >
-          The Next.js boilerplate with auth, payments, streaming AI chat, token tracking, and usage-based billing. Clone. Customize. Deploy.
+          Launch your AI SaaS in 24 hours with a production-ready Next.js boilerplate.
         </motion.p>
 
         <motion.div
           {...fadeUpProps(0.3)}
           className="flex flex-col items-center justify-center gap-3.5 sm:flex-row"
         >
-          <button
-            onClick={() => openModal('pro')}
+          <Link
+            href="/dashboard/chat"
             className="rounded-xl px-9 py-4 text-[16px] font-bold text-white transition-all"
             style={{
               background: 'linear-gradient(135deg, #0F4C75, #3498DB)',
@@ -352,10 +343,10 @@ export function HeroSection() {
               e.currentTarget.style.transform = 'none';
             }}
           >
-            Get Ignitra — $249
-          </button>
-          <Link
-            href="/dashboard/chat"
+            See Demo
+          </Link>
+          <button
+            onClick={() => openModal('pro')}
             className="rounded-xl px-9 py-4 text-[16px] font-bold transition-all"
             style={{
               background: 'transparent',
@@ -371,8 +362,8 @@ export function HeroSection() {
               e.currentTarget.style.background = 'transparent';
             }}
           >
-            Live demo
-          </Link>
+            Get Ignitra — $249
+          </button>
         </motion.div>
       </div>
 

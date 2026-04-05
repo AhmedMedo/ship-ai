@@ -70,7 +70,19 @@
     "typescript": "latest",
     "vitest": "latest"
   },
-  "browserslist": [
-    "defaults and fully supports es6-module"
-  ]
+  "browserslist": {
+    "production": [
+      "chrome >= 87",
+      "edge >= 88",
+      "firefox >= 78",
+      "safari >= 14",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }
