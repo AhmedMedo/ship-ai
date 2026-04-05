@@ -132,20 +132,27 @@ export function HeroSection() {
     window.addEventListener('mousemove', onMouseMove);
     rafRef.current = requestAnimationFrame(animate);
 
-    // Generate particles
+    // Generate particles — deferred to avoid blocking initial render
     const particlesEl = sceneRef.current.querySelector('#particles') as HTMLElement;
     if (particlesEl) {
-      for (let i = 0; i < 30; i++) {
-        const p = document.createElement('div');
-        const size = Math.random() * 2 + 1;
-        p.style.cssText = `
-          position:absolute; border-radius:50%; background:rgba(255,255,255,0.3);
-          width:${size}px; height:${size}px;
-          left:${Math.random() * 100}%; top:${Math.random() * 100}%;
-          opacity:${Math.random() * 0.5 + 0.1};
-          animation: particle-float ${Math.random() * 20 + 15}s linear ${-(Math.random() * 20)}s infinite;
-        `;
-        particlesEl.appendChild(p);
+      const createParticles = () => {
+        for (let i = 0; i < 30; i++) {
+          const p = document.createElement('div');
+          const size = Math.random() * 2 + 1;
+          p.style.cssText = `
+            position:absolute; border-radius:50%; background:rgba(255,255,255,0.3);
+            width:${size}px; height:${size}px;
+            left:${Math.random() * 100}%; top:${Math.random() * 100}%;
+            opacity:${Math.random() * 0.5 + 0.1};
+            animation: particle-float ${Math.random() * 20 + 15}s linear ${-(Math.random() * 20)}s infinite;
+          `;
+          particlesEl.appendChild(p);
+        }
+      };
+      if ('requestIdleCallback' in window) {
+        (window as unknown as { requestIdleCallback: (cb: () => void) => void }).requestIdleCallback(createParticles);
+      } else {
+        setTimeout(createParticles, 200);
       }
     }
 

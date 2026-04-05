@@ -12,9 +12,6 @@ const inter = Inter({
   variable: '--font-sans',
 });
 
-// Force dynamic rendering — ThemeProvider (client component) causes
-// useContext errors during static prerendering
-export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://ignitra.dev'),
@@ -85,6 +82,10 @@ const structuredData = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+      </head>
       <body className={`${inter.variable} min-h-screen font-sans antialiased`} suppressHydrationWarning>
         <script
           type="application/ld+json"

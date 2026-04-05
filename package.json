@@ -69,5 +69,8 @@
     "tsx": "latest",
     "typescript": "latest",
     "vitest": "latest"
-  }
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module"
+  ]
 }
