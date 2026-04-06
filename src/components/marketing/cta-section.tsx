@@ -43,21 +43,17 @@ export function CtaSection() {
         >
           Ready to launch your AI SaaS?
         </h2>
-        <p className="relative mb-8 text-[16px]" style={{ color: '#94A3B8' }}>
-          Get the free starter kit and launch checklist. Start building today.
+        <p className="relative mb-8 max-w-[480px] mx-auto text-[16px] leading-relaxed" style={{ color: '#94A3B8' }}>
+          Same offer as above: production-ready Next.js, auth, Stripe, and AI chat — real code, not slides.
         </p>
 
-        <div className="relative mx-auto flex max-w-[480px] justify-center">
+        <div className="relative mx-auto flex max-w-[520px] justify-center">
           <LeadCaptureForm
-            ctaText="Get Free Starter Kit"
+            ctaText="Get instant access — real code"
             source="bottom-cta"
             variant="inline"
           />
         </div>
-
-        <p className="relative mt-6 text-[13px]" style={{ color: '#64748B' }}>
-          Early adopters get priority access to V2 features. No spam, ever.
-        </p>
       </div>
 
       <style>{`

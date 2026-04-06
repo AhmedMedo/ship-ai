@@ -3,7 +3,13 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { LeadCaptureForm } from '@/components/landing/lead-capture-form';
-import { RotatingText } from '@/components/marketing/rotating-text';
+
+const HERO_LEAD_BULLETS = [
+  'Full Next.js 15 project structure',
+  'Auth + Stripe already integrated',
+  'AI chat (OpenAI / Claude ready)',
+  'Real SaaS architecture (not a demo)',
+];
 
 const techStack = [
   {
@@ -163,6 +169,7 @@ export function HeroSection() {
 
   return (
     <section
+      id="hero"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden"
       style={{ zIndex: 1 }}
     >
@@ -280,46 +287,71 @@ export function HeroSection() {
 
       {/* Hero content */}
       <div className="relative z-[2] mx-auto w-full max-w-[1200px] px-6 pb-10 pt-20 text-center">
-        <motion.div
-          {...fadeUpProps(0)}
-          className="mb-8 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[13px] font-medium"
-          style={{
-            borderColor: 'rgba(255,255,255,0.06)',
-            background: 'rgba(255,255,255,0.03)',
-            color: '#94A3B8',
-          }}
-        >
+        {/* Badge row: two pills side by side */}
+        <motion.div {...fadeUpProps(0)} className="mb-8 flex flex-wrap items-center justify-center gap-3">
           <span
-            className="h-1.5 w-1.5 rounded-full"
-            style={{ background: '#06B6D4', animation: 'pulse-dot 2s ease-in-out infinite' }}
-          />
-          Built for developers who ship fast
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[13px] font-medium"
+            style={{
+              borderColor: 'rgba(255,255,255,0.06)',
+              background: 'rgba(255,255,255,0.03)',
+              color: '#94A3B8',
+            }}
+          >
+            <span
+              className="h-1.5 w-1.5 rounded-full"
+              style={{ background: '#06B6D4', animation: 'pulse-dot 2s ease-in-out infinite' }}
+            />
+            Built for developers who ship fast
+          </span>
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[13px] font-semibold"
+            style={{
+              borderColor: 'rgba(232,89,60,0.25)',
+              background: 'rgba(232,89,60,0.06)',
+              color: '#f87171',
+            }}
+          >
+            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Stop rebuilding from scratch
+          </span>
         </motion.div>
 
         <motion.h1
           initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut', delay: 0.1 }}
-          className="mx-auto mb-7 max-w-[900px] font-black"
+          className="mx-auto mb-6 font-black"
           style={{
-            fontSize: 'clamp(48px, 7vw, 82px)',
-            lineHeight: 1.05,
+            fontSize: 'clamp(44px, 6.5vw, 76px)',
+            lineHeight: 1.06,
             letterSpacing: '-0.04em',
             color: '#F1F5F9',
+            maxWidth: '820px',
           }}
         >
-          Stop wasting weeks rebuilding
+          Launch your AI SaaS
           <br />
-          <RotatingText words={['auth', 'billing', 'AI chat', 'usage tracking']} />
+          <span
+            style={{
+              background: 'linear-gradient(90deg, #3498DB, #06B6D4)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            in days, not months
+          </span>
         </motion.h1>
 
         <motion.p
           {...fadeUpProps(0.2)}
-          className="mx-auto mb-10 max-w-[620px] text-[18px] leading-[1.7]"
+          className="mx-auto mb-10 max-w-[520px] text-[17px] leading-[1.8]"
           style={{ color: '#94A3B8' }}
         >
-          The production-ready Next.js boilerplate with auth, payments, AI chat, and usage billing.
-          Clone it. Customize it. Launch this week.
+          Auth, Stripe, and AI chat — already built.
+          <br className="hidden sm:block" />
+          Clone, customize, and ship this week.
         </motion.p>
 
         <motion.div
@@ -327,12 +359,13 @@ export function HeroSection() {
           className="flex flex-col items-center gap-4"
         >
           <LeadCaptureForm
-            ctaText="Get Free AI SaaS Starter Kit"
+            ctaText="Get instant access"
             source="hero"
             variant="inline"
+            bullets={HERO_LEAD_BULLETS}
+            trustLine="Free for early users — limited access"
           />
           <p className="text-[13px]" style={{ color: '#64748B' }}>
-            Join 50+ developers building with Ignitra.{' '}
             <button
               type="button"
               onClick={() => {
@@ -341,7 +374,7 @@ export function HeroSection() {
               className="underline transition-colors hover:text-white/70"
               style={{ color: '#94A3B8' }}
             >
-              See live demo
+              See it in action first →
             </button>
           </p>
         </motion.div>

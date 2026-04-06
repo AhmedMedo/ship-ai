@@ -96,7 +96,7 @@ export function Navbar() {
           </Link>
           <button
             type="button"
-            onClick={() => scrollTo('#cta')}
+            onClick={() => scrollTo('#hero')}
             className="rounded-lg px-5 py-2 text-[13px] font-semibold text-white transition-all"
             style={{ background: '#0F4C75' }}
             onMouseEnter={(e) => {
@@ -108,7 +108,7 @@ export function Navbar() {
               e.currentTarget.style.transform = 'none';
             }}
           >
-            Get Free Kit
+            Get instant access
           </button>
         </div>
 
@@ -167,11 +167,11 @@ export function Navbar() {
             </Link>
             <button
               type="button"
-              onClick={() => { scrollTo('#cta'); setOpen(false); }}
+              onClick={() => { scrollTo('#hero'); setOpen(false); }}
               className="rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white"
               style={{ background: '#0F4C75' }}
             >
-              Get Free Kit
+              Get instant access
             </button>
           </div>
         </div>

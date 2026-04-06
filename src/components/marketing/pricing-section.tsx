@@ -98,11 +98,11 @@ export function PricingSection() {
           Not sure yet?{' '}
           <button
             type="button"
-            onClick={() => document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' })}
+            onClick={() => document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })}
             className="underline transition-colors hover:text-white/70"
             style={{ color: '#94A3B8' }}
           >
-            Get the free starter kit
+            Get instant access (free)
           </button>{' '}
           first.
         </p>
