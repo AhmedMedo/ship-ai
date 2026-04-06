@@ -69,15 +69,23 @@ export default async function BlogPostPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Back link */}
-      <Link
-        href="/blog"
-        className="mb-8 inline-flex items-center gap-1.5 text-[13px] font-medium transition-colors"
-        style={{ color: '#64748B' }}
-      >
-        <ArrowLeft className="h-3.5 w-3.5" />
-        Back to blog
-      </Link>
+      {/* Back links */}
+      <div className="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-[13px] font-medium">
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 transition-colors hover:opacity-90"
+          style={{ color: '#64748B' }}
+        >
+          <ArrowLeft className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          Back to blog
+        </Link>
+        <span className="select-none text-white/10" aria-hidden>
+          |
+        </span>
+        <Link href="/" className="transition-colors hover:opacity-90" style={{ color: '#64748B' }} aria-label="Ignitra home">
+          Home
+        </Link>
+      </div>
 
       {/* Header */}
       <h1

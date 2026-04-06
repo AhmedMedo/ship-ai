@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/blog';
-import { Calendar, User } from 'lucide-react';
+import { Calendar, User, ArrowLeft } from 'lucide-react';
+import { Logo } from '@/components/shared/logo';
 
 export const metadata: Metadata = {
   title: 'Blog — Ignitra',
@@ -25,7 +26,18 @@ export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
-    <div className="mx-auto max-w-[880px] px-6 pb-20 pt-32">
+    <div className="mx-auto max-w-[880px] px-6 pb-20 pt-24 sm:pt-28">
+      <div className="mb-10 flex justify-start">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 rounded-lg text-[14px] font-medium transition-colors hover:opacity-90"
+          style={{ color: '#94A3B8' }}
+          aria-label="Back to Ignitra home"
+        >
+          <ArrowLeft className="h-4 w-4 shrink-0" aria-hidden />
+          <Logo size="sm" />
+        </Link>
+      </div>
       <h1
         className="mb-3 text-center font-black"
         style={{ fontSize: 'clamp(32px, 5vw, 48px)', letterSpacing: '-0.03em', color: '#F1F5F9' }}
