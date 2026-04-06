@@ -186,10 +186,10 @@ function ChatContent() {
   }, [aiIntro.done, phase]);
 
   return (
-    <div className="flex flex-1 flex-col gap-2.5 overflow-hidden">
+    <div className="flex flex-1 flex-col gap-2 overflow-hidden sm:gap-2.5">
       {userTyping.displayed && (
         <div
-          className="max-w-[80%] self-end rounded-xl rounded-br-sm px-3.5 py-2 text-[11px] leading-relaxed text-white"
+          className="max-w-[90%] self-end rounded-xl rounded-br-sm px-3 py-1.5 text-[10px] leading-relaxed text-white sm:max-w-[80%] sm:px-3.5 sm:py-2 sm:text-[11px]"
           style={{ background: '#0F4C75' }}
         >
           {userTyping.displayed}
@@ -199,7 +199,7 @@ function ChatContent() {
 
       {phase >= 1 && (
         <div
-          className="max-w-[80%] self-start rounded-xl rounded-bl-sm px-3.5 py-2 text-[11px] leading-relaxed"
+          className="max-w-[90%] self-start rounded-xl rounded-bl-sm px-3 py-1.5 text-[10px] leading-relaxed sm:max-w-[80%] sm:px-3.5 sm:py-2 sm:text-[11px]"
           style={{ background: 'rgba(255,255,255,0.04)', color: '#F1F5F9' }}
         >
           {aiIntro.displayed}
@@ -209,7 +209,7 @@ function ChatContent() {
 
       {phase >= 2 && (
         <div
-          className="rounded-lg p-3 text-[10px] leading-[1.7]"
+          className="rounded-lg p-2 text-[9px] leading-[1.6] sm:p-3 sm:text-[10px] sm:leading-[1.7]"
           style={{
             background: '#1e1e2e',
             fontFamily: "'JetBrains Mono', ui-monospace, monospace",
@@ -239,14 +239,14 @@ function ChatContent() {
 
 function UsageContent() {
   return (
-    <div className="flex flex-1 flex-col gap-4 overflow-hidden">
-      <div className="text-[12px] font-semibold" style={{ color: '#F1F5F9' }}>
+    <div className="flex flex-1 flex-col gap-3 overflow-hidden sm:gap-4">
+      <div className="text-[11px] font-semibold sm:text-[12px]" style={{ color: '#F1F5F9' }}>
         Token Usage Dashboard
       </div>
 
       {USAGE_STATS.map((s, i) => (
-        <div key={s.label} className="flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-[10px]" style={{ color: '#94A3B8' }}>
+        <div key={s.label} className="flex flex-col gap-1">
+          <div className="flex items-center justify-between text-[9px] sm:text-[10px]" style={{ color: '#94A3B8' }}>
             <span>{s.label}</span>
             <span>
               <span style={{ color: '#F1F5F9' }}>{s.value}</span> / {s.max}
@@ -256,14 +256,14 @@ function UsageContent() {
         </div>
       ))}
 
-      <div className="mt-1 text-[10px] font-medium" style={{ color: '#94A3B8' }}>
+      <div className="mt-0.5 text-[9px] font-medium sm:mt-1 sm:text-[10px]" style={{ color: '#94A3B8' }}>
         Model breakdown
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-1.5 sm:gap-2">
         {MODEL_BREAKDOWN.map((m, i) => (
           <div
             key={m.model}
-            className="flex flex-1 flex-col items-center gap-1.5 rounded-lg p-2"
+            className="flex flex-1 flex-col items-center gap-1 rounded-lg p-1.5 sm:gap-1.5 sm:p-2"
             style={{
               background: 'rgba(255,255,255,0.03)',
               border: '1px solid rgba(255,255,255,0.04)',
@@ -271,8 +271,8 @@ function UsageContent() {
             }}
           >
             <div className="h-1.5 w-1.5 rounded-full" style={{ background: m.color }} />
-            <div className="text-[10px] font-semibold" style={{ color: '#F1F5F9' }}>{m.pct}%</div>
-            <div className="text-[8px]" style={{ color: '#64748B' }}>{m.model}</div>
+            <div className="text-[9px] font-semibold sm:text-[10px]" style={{ color: '#F1F5F9' }}>{m.pct}%</div>
+            <div className="text-[7px] sm:text-[8px]" style={{ color: '#64748B' }}>{m.model}</div>
           </div>
         ))}
       </div>
@@ -292,18 +292,18 @@ function SettingsContent() {
   }, []);
 
   return (
-    <div className="flex flex-1 flex-col gap-3 overflow-hidden">
-      <div className="text-[12px] font-semibold" style={{ color: '#F1F5F9' }}>
+    <div className="flex flex-1 flex-col gap-2.5 overflow-hidden sm:gap-3">
+      <div className="text-[11px] font-semibold sm:text-[12px]" style={{ color: '#F1F5F9' }}>
         AI Provider Settings
       </div>
 
-      <div className="flex flex-col gap-2">
-        <div className="text-[10px]" style={{ color: '#94A3B8' }}>Active provider</div>
-        <div className="flex gap-2">
+      <div className="flex flex-col gap-1.5 sm:gap-2">
+        <div className="text-[9px] sm:text-[10px]" style={{ color: '#94A3B8' }}>Active provider</div>
+        <div className="flex gap-1.5 sm:gap-2">
           {providers.map((p, i) => (
             <button
               key={p}
-              className="rounded-md px-3 py-1.5 text-[10px] font-medium transition-all duration-500"
+              className="rounded-md px-2 py-1 text-[9px] font-medium transition-all duration-500 sm:px-3 sm:py-1.5 sm:text-[10px]"
               style={{
                 background: provider === i ? '#0F4C75' : 'rgba(255,255,255,0.04)',
                 color: provider === i ? '#fff' : '#94A3B8',
@@ -316,10 +316,10 @@ function SettingsContent() {
         </div>
       </div>
 
-      <div className="mt-1 flex flex-col gap-2">
-        <div className="text-[10px]" style={{ color: '#94A3B8' }}>API Key</div>
+      <div className="mt-0.5 flex flex-col gap-1.5 sm:mt-1 sm:gap-2">
+        <div className="text-[9px] sm:text-[10px]" style={{ color: '#94A3B8' }}>API Key</div>
         <div
-          className="rounded-md px-3 py-2 text-[10px]"
+          className="rounded-md px-2.5 py-1.5 text-[9px] sm:px-3 sm:py-2 sm:text-[10px]"
           style={{
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.06)',
@@ -331,10 +331,10 @@ function SettingsContent() {
         </div>
       </div>
 
-      <div className="mt-1 flex flex-col gap-2">
-        <div className="text-[10px]" style={{ color: '#94A3B8' }}>Model</div>
+      <div className="mt-0.5 flex flex-col gap-1.5 sm:mt-1 sm:gap-2">
+        <div className="text-[9px] sm:text-[10px]" style={{ color: '#94A3B8' }}>Model</div>
         <div
-          className="rounded-md px-3 py-2 text-[10px]"
+          className="rounded-md px-2.5 py-1.5 text-[9px] sm:px-3 sm:py-2 sm:text-[10px]"
           style={{
             background: 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.06)',
@@ -352,13 +352,13 @@ function SettingsContent() {
 
 function BillingContent() {
   return (
-    <div className="flex flex-1 flex-col gap-3 overflow-hidden">
-      <div className="text-[12px] font-semibold" style={{ color: '#F1F5F9' }}>
+    <div className="flex flex-1 flex-col gap-2.5 overflow-hidden sm:gap-3">
+      <div className="text-[11px] font-semibold sm:text-[12px]" style={{ color: '#F1F5F9' }}>
         Subscription & Billing
       </div>
 
       <div
-        className="flex items-center justify-between rounded-lg p-3"
+        className="flex items-center justify-between rounded-lg p-2.5 sm:p-3"
         style={{
           background: 'linear-gradient(135deg, rgba(15,76,117,0.3), rgba(124,58,237,0.15))',
           border: '1px solid rgba(255,255,255,0.06)',
@@ -369,17 +369,17 @@ function BillingContent() {
           <div className="text-[11px] font-semibold" style={{ color: '#F1F5F9' }}>Pro Plan</div>
           <div className="text-[9px]" style={{ color: '#94A3B8' }}>Billed monthly • Renews Apr 28</div>
         </div>
-        <div className="text-[14px] font-bold" style={{ color: '#a6e3a1' }}>$29<span className="text-[9px] font-normal" style={{ color: '#64748B' }}>/mo</span></div>
+        <div className="text-[13px] font-bold sm:text-[14px]" style={{ color: '#a6e3a1' }}>$29<span className="text-[9px] font-normal" style={{ color: '#64748B' }}>/mo</span></div>
       </div>
 
       <div className="flex gap-2" style={{ animation: 'fadeSlideUp 0.5s 0.4s both' }}>
-        <div className="flex-1 rounded-lg p-2.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex-1 rounded-lg p-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}>
           <div className="text-[9px]" style={{ color: '#64748B' }}>This month</div>
-          <div className="text-[13px] font-semibold" style={{ color: '#F1F5F9' }}>$29.00</div>
+          <div className="text-[12px] font-semibold sm:text-[13px]" style={{ color: '#F1F5F9' }}>$29.00</div>
         </div>
-        <div className="flex-1 rounded-lg p-2.5" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="flex-1 rounded-lg p-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.04)' }}>
           <div className="text-[9px]" style={{ color: '#64748B' }}>Usage overage</div>
-          <div className="text-[13px] font-semibold" style={{ color: '#F1F5F9' }}>$0.00</div>
+          <div className="text-[12px] font-semibold sm:text-[13px]" style={{ color: '#F1F5F9' }}>$0.00</div>
         </div>
       </div>
 
@@ -441,7 +441,7 @@ export function DemoSection() {
     <section
       id="demo"
       ref={sectionRef as React.RefObject<HTMLElement>}
-      className="relative z-[1] px-6 pb-20 pt-4"
+      className="relative z-[1] px-3 pb-20 pt-4 sm:px-6"
     >
       {/* Section heading */}
       <div className="mx-auto mb-8 max-w-[960px] text-center">
@@ -480,17 +480,17 @@ export function DemoSection() {
         >
           {/* Browser chrome */}
           <div
-            className="flex h-10 items-center gap-2 px-4"
+            className="flex h-8 items-center gap-1.5 px-3 sm:h-10 sm:gap-2 sm:px-4"
             style={{
               background: 'rgba(255,255,255,0.02)',
               borderBottom: '1px solid rgba(255,255,255,0.06)',
             }}
           >
-            <div className="h-2.5 w-2.5 rounded-full bg-red-500/80" />
-            <div className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
-            <div className="h-2.5 w-2.5 rounded-full bg-green-500/80" />
+            <div className="h-2 w-2 rounded-full bg-red-500/80 sm:h-2.5 sm:w-2.5" />
+            <div className="h-2 w-2 rounded-full bg-yellow-400/80 sm:h-2.5 sm:w-2.5" />
+            <div className="h-2 w-2 rounded-full bg-green-500/80 sm:h-2.5 sm:w-2.5" />
             <div
-              className="mx-auto flex items-center gap-1 rounded-md px-3 py-1 text-[11px]"
+              className="mx-auto hidden items-center gap-1 rounded-md px-3 py-1 text-[11px] sm:flex"
               style={{ background: 'rgba(255,255,255,0.04)', color: '#6B7280' }}
             >
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -502,7 +502,7 @@ export function DemoSection() {
           </div>
 
           {/* App body */}
-          <div className="flex min-h-[320px] gap-0 p-0 sm:gap-4 sm:p-5">
+          <div className="flex min-h-[240px] flex-col gap-0 p-0 sm:min-h-[320px] sm:flex-row sm:gap-4 sm:p-5">
             {/* Sidebar */}
             <div className="hidden w-[170px] flex-shrink-0 sm:block">
               <div
@@ -552,12 +552,14 @@ export function DemoSection() {
             </div>
 
             {/* Mobile tab bar */}
-            <div className="flex w-full gap-1 border-b border-white/5 px-3 pt-3 sm:hidden">
+            <div className="flex w-full flex-shrink-0 gap-1 px-3 pt-2 pb-1 sm:hidden"
+              style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+            >
               {TABS.map((item) => (
                 <button
                   key={item}
                   onClick={() => handleTabClick(item)}
-                  className="flex-1 rounded-t-md px-2 py-1.5 text-[10px] transition-all duration-300"
+                  className="flex-1 rounded-md px-1 py-1.5 text-[10px] font-medium transition-all duration-300"
                   style={
                     item === activeTab
                       ? { background: '#0F4C75', color: '#fff' }
@@ -570,7 +572,7 @@ export function DemoSection() {
             </div>
 
             {/* Main content area with cross-fade */}
-            <div className="flex-1 p-4 sm:p-0">
+            <div className="flex-1 overflow-hidden p-3 sm:p-0">
               {inView && (
                 <TabTransition tabKey={activeTab}>
                   {activeTab === 'Chat' && <ChatContent key="chat" />}
